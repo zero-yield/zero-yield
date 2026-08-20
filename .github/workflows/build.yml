@@ -32,21 +32,17 @@ jobs:
 
           darklua --version
 
-      - name: Minify source with DarkLua
+      - name: Prepare source
         run: |
           mkdir -p /tmp/devbuild
 
-          # DarkLua needs the .luau extension to recognize the source
           cp source /tmp/devbuild/source.luau
 
-          # Process the source
+      - name: Minify source with DarkLua
+        run: |
           darklua process \
             /tmp/devbuild/source.luau \
             /tmp/devbuild/source.min.luau
-
-          # Rename the generated file
-          mv /tmp/devbuild/source.min.luau \
-            /tmp/devbuild/source.min.lua
 
       - name: Commit build to builds branch
         run: |
@@ -56,7 +52,7 @@ jobs:
           # Fetch builds branch if it exists
           git fetch origin builds:builds || true
 
-          # Switch to builds branch, or create it if it doesn't exist
+          # Switch to builds branch or create it
           git checkout builds 2>/dev/null || git checkout --orphan builds
 
           # Remove everything except .git
@@ -64,11 +60,22 @@ jobs:
             ! -name '.git' \
             -exec rm -rf {} +
 
-          # Copy the generated build
-          cp /tmp/devbuild/source.min.lua source.lua
+          # Copy the generated .luau file
+          cp /tmp/devbuild/source.min.luau source.luau
 
-          # Commit and push
-          git add source.lua
+          # Make sure only .luau files are committed
+          git add --all
+
+          git add '*.luau' 2>/dev/null || true
+
+          # Remove anything that isn't a .luau file from Git
+          for file in $(git ls-files); do
+            if [[ "$file" != *.luau ]]; then
+              git rm -f -- "$file"
+            fi
+          done
+
+          git add '*.luau' 2>/dev/null || true
 
           git commit \
             -m "Build ${{ steps.vars.outputs.sha_short }}" \
