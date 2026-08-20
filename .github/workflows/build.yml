@@ -66,15 +66,23 @@ jobs:
           cp /tmp/devbuild/source.min.luau .
 
           # Only keep .luau files
-          find . -type f ! -name '*.luau' ! -path './.git/*' -delete
+          find . -type f \
+            ! -name '*.luau' \
+            ! -path './.git/*' \
+            -delete
 
-          # Stage files
+          # Stage changes
           git add --all
+
+          # Don't create an empty commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
 
           # Commit
           git commit \
-            -m "Build ${{ steps.vars.outputs.sha_short }}" \
-            --allow-empty
+            -m "Build ${{ steps.vars.outputs.sha_short }}"
 
           # Push
           git push origin builds
