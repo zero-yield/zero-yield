@@ -1,5 +1,5 @@
 if IY_LOADED and not _G.IY_DEBUG then
-	-- error("Infinite Yield is already running!", 0)
+	-- error("Zero Yield is already running!", 0)
 	return
 end
 
@@ -3116,7 +3116,7 @@ function saves()
 		if jsonAttempts >= 10 then
 			nosaves = true
 			useFactorySettings()
-			createPopup("File Error", "Sorry, we have attempted to parse your save file, but it is unreadable!\n\nInfinite Yield is now using factory settings until your exploit's file system works.\n\nYour save file has not been deleted.")
+			createPopup("File Error", "Sorry, we have attempted to parse your save file, but it is unreadable!\n\nZero Yield is now using factory settings until your exploit's file system works.\n\nYour save file has not been deleted.")
 		else
 			nosaves = true
 			useFactorySettings()
