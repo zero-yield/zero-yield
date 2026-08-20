@@ -1,24 +1,14 @@
-# Infinite Yield
+# Zero Yield
 
-The best command line script for roblox.
+A fork of Infinite Yield designed to provide a better experience.
 
-[![](https://dcbadge.limes.pink/api/server/https://discord.gg/78ZuWSq)](https://discord.gg/78ZuWSq)
+> [!CAUTION]
+> This fork is still in development. Expect bugs!
 
-```lua
-loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+```luau
+loadstring(game:HttpGet("https://cdn.jsdelivr.net/gh/jacklebeignet/zero-yield@refs/heads/builds/source.min.luau"))()
 ```
 
- - Currently 400 commands
- - Open Source
- - 8+ years of development
+## Credits
 
-## Developers
-
-### Creator: [Edge](https://github.com/EdgeIY)
-### Developers: [Moon](https://github.com/LorekeeperZinnia), [Zwolf](https://github.com/luatsuki), [Sleaze](https://github.com/sleaze5), [Toon](https://github.com/Toon-arch), [Peyton](https://github.com/peyton2465), [ATP](https://github.com/ionizedparticle)
-
-## Usage
-You can learn how to use all the features of this script in [the wiki](https://github.com/EdgeIY/infiniteyield/wiki)!
-
-## Contributing
-There is no specific rules on contributing (as of now) just open a [pull request](https://github.com/EdgeIY/infiniteyield/pulls) and if it checks out we will merge it!
+This project is based on the original work by EdgeIY. The original project can be found [here](https://github.com/EdgeIY/infiniteyield).
