@@ -1,5 +1,5 @@
 {
-  generator: { name: "dense", column_span: 9999999999999999999 },
+  generator: "dense",
   rules: [
     'remove_spaces',
     'remove_comments',
