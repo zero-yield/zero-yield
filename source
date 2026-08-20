@@ -4793,6 +4793,8 @@ CMDs[#CMDs + 1] = {NAME = 'sitwalk', DESC = 'Makes your character sit while stil
 CMDs[#CMDs + 1] = {NAME = 'nosit', DESC = 'Prevents your character from sitting'}
 CMDs[#CMDs + 1] = {NAME = 'unnosit', DESC = 'Disables nosit'}
 CMDs[#CMDs + 1] = {NAME = 'jump', DESC = 'Makes your character jump'}
+CMDs[#CMDs + 1] = {NAME = 'bhop / bunnyhop', DESC = 'Makes your character automatically jump'}
+CMDs[#CMDs + 1] = {NAME = 'unbhop / unbunnyhop', DESC = 'Stops your character from automatically jumping'}
 CMDs[#CMDs + 1] = {NAME = 'infinitejump / infjump', DESC = 'Allows you to jump before hitting the ground'}
 CMDs[#CMDs + 1] = {NAME = 'uninfinitejump / uninfjump', DESC = 'Disables infjump'}
 CMDs[#CMDs + 1] = {NAME = 'flyjump', DESC = 'Allows you to hold space to fly up'}
@@ -9924,6 +9926,30 @@ end)
 
 addcmd("jump", {}, function(args, speaker)
 	speaker.Character:FindFirstChildWhichIsA("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+end)
+
+local bhopConnection
+
+addcmd("bhop", {"bunnyhop"}, function(args, speaker)
+	if bhopConnection then
+		bhopConnection:Disconnect()
+	end
+
+	bhopConnection = game:GetService("RunService").Heartbeat:Connect(function()
+		local character = speaker.Character
+		local humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
+
+		if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air then
+			humanoid.Jump = true
+		end
+	end)
+end)
+
+addcmd("unbhop", {"unbunnyhop"}, function(args, speaker)
+	if bhopConnection then
+		bhopConnection:Disconnect()
+		bhopConnection = nil
+	end
 end)
 
 local infJump
