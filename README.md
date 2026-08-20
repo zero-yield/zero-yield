@@ -6,7 +6,7 @@ A fork of Infinite Yield designed to provide a better experience.
 > This fork is still in development. Expect bugs!
 
 ```luau
-loadstring(game:HttpGet("https://cdn.jsdelivr.net/gh/jacklebeignet/zero-yield@refs/heads/builds/source.min.luau"))()
+loadstring(game:HttpGet("https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/builds/source.min.luau"))()
 ```
 
 ## Credits
