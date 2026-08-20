@@ -6503,7 +6503,7 @@ local TeleportCheck = false
 Players.LocalPlayer.OnTeleport:Connect(function(State)
 	if KeepInfYield and (not TeleportCheck) and queueteleport then
 		TeleportCheck = true
-		queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
+		queueteleport("loadstring(game:HttpGet('https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/builds/source.min.luau'))()")
 	end
 end)
 
@@ -13301,7 +13301,7 @@ end)
 
 task.spawn(function()
 	local success, latestVersionInfo = pcall(function() 
-		local versionJson = game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/version")
+		local versionJson = game:HttpGet("https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/master/version")
 		return HttpService:JSONDecode(versionJson)
 	end)
 
