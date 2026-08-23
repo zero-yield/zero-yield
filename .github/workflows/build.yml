@@ -21,17 +21,10 @@ jobs:
         run: |
           echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Install DarkLua
-        run: |
-          curl -L -o darklua.zip \
-            https://github.com/seaofvoices/darklua/releases/latest/download/darklua-linux-x86_64.zip
-
-          unzip -q darklua.zip -d darklua-bin
-
-          sudo mv darklua-bin/darklua /usr/local/bin/darklua
-
-          darklua --version
-
+      - uses: jacklebeignet/setup-darklua@v1
+        with:
+          version: latest
+      
       - name: Prepare source
         run: |
           mkdir -p /tmp/devbuild
