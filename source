@@ -13874,8 +13874,12 @@ addcmd("bhop", { "bunnyhop" }, function(args, speaker)
 		local character = speaker.Character
 		local humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
 
-		if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air then
-			humanoid.Jump = true
+		if humanoid then
+			if humanoid.FloorMaterial ~= Enum.Material.Air then
+				humanoid.Jump = true
+			else
+				humanoid.Jump = false
+			end
 		end
 	end)
 end)
