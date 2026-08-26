@@ -13,6 +13,34 @@ loadstring(game:HttpGet("https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/
 
 Plugins for Zero Yield are `.zy` files to avoid confusion with Infinite Yield plugins. If you are using an `.iy` file and want to port it to Zero Yield, simply rename the file extension to: `.zy`.
 
+## Development
+
+### Prerequisites
+
+Install [Rokit](https://github.com/rojo-rbx/rokit) to manage project tools (selene, StyLua).
+
+```bash
+rokit install
+```
+
+### Git hooks
+
+This project uses [pre-commit](https://pre-commit.com) to lint and format code automatically on each commit.
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+After setup, `stylua` and `selene` will run on staged `.luau` files before every commit.
+
+### Manual checks
+
+```bash
+stylua --check source
+selene source
+```
+
 ## Linting
 
 This project uses [selene](https://kampfkarren.github.io/selene/) for Lua linting with a custom standard library (`roblox_exploit.yml`) that extends the Roblox std lib with exploit-specific globals (e.g. `getgenv`, `cloneref`, `writefile`).
