@@ -13864,30 +13864,42 @@ addcmd("jump", {}, function(args, speaker)
 end)
 
 local bhopConnection
+local bhopCharConnection
 
 addcmd("bhop", { "bunnyhop" }, function(args, speaker)
 	if bhopConnection then
 		bhopConnection:Disconnect()
 	end
+	if bhopCharConnection then
+		bhopCharConnection:Disconnect()
+	end
 
-	bhopConnection = game:GetService("RunService").Heartbeat:Connect(function()
-		local character = speaker.Character
-		local humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
-
-		if humanoid then
-			if humanoid.FloorMaterial ~= Enum.Material.Air then
-				humanoid.Jump = true
-			else
-				humanoid.Jump = false
-			end
+	local function onCharacter(character)
+		local humanoid = character:WaitForChild("Humanoid")
+		if bhopConnection then
+			bhopConnection:Disconnect()
 		end
-	end)
+		bhopConnection = RunService.Heartbeat:Connect(function()
+			if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air then
+				humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+			end
+		end)
+	end
+
+	if speaker.Character then
+		onCharacter(speaker.Character)
+	end
+	bhopCharConnection = speaker.CharacterAdded:Connect(onCharacter)
 end)
 
 addcmd("unbhop", { "unbunnyhop" }, function(args, speaker)
 	if bhopConnection then
 		bhopConnection:Disconnect()
 		bhopConnection = nil
+	end
+	if bhopCharConnection then
+		bhopCharConnection:Disconnect()
+		bhopCharConnection = nil
 	end
 end)
 
