@@ -5,3 +5,4 @@
 
 [tools]
 selene = "Kampfkarren/selene@0.31.0"
+StyLua = "JohnnyMorganz/StyLua@2.5.2"
