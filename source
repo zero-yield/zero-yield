@@ -283,7 +283,8 @@ join = Instance.new("Frame")
 Toggle_2 = Instance.new("TextButton")
 Clear_2 = Instance.new("TextButton")
 scroll_3 = Instance.new("ScrollingFrame")
-listlayout = Instance.new("UIListLayout",scroll_3)
+listlayout = Instance.new("UIListLayout")
+	listlayout.Parent = scroll_3
 selectChat = Instance.new("TextButton")
 selectJoin = Instance.new("TextButton")
 
@@ -3381,7 +3382,7 @@ function CreateJoinLabel(plr,ID)
 end
 
 ZYMouse.KeyDown:Connect(function(Key)
-	if (Key==prefix) then
+	if Key==prefix then
 		RunService.RenderStepped:Wait()
 		Cmdbar:CaptureFocus()
 		maximizeHolder()
@@ -5731,7 +5732,7 @@ function ESP(plr, logic)
 			ESPholder.Parent = COREGUI
 			repeat wait(1) until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 			for b,n in pairs (plr.Character:GetChildren()) do
-				if (n:IsA("BasePart")) then
+				if n:IsA("BasePart") then
 					local a = Instance.new("BoxHandleAdornment")
 					a.Name = plr.Name
 					a.Parent = ESPholder
@@ -5827,7 +5828,7 @@ function CHMS(plr)
 			ESPholder.Parent = COREGUI
 			repeat wait(1) until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 			for b,n in pairs (plr.Character:GetChildren()) do
-				if (n:IsA("BasePart")) then
+				if n:IsA("BasePart") then
 					local a = Instance.new("BoxHandleAdornment")
 					a.Name = plr.Name
 					a.Parent = ESPholder
@@ -5888,7 +5889,7 @@ function Locate(plr)
 			ESPholder.Parent = COREGUI
 			repeat wait(1) until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 			for b,n in pairs (plr.Character:GetChildren()) do
-				if (n:IsA("BasePart")) then
+				if n:IsA("BasePart") then
 					local a = Instance.new("BoxHandleAdornment")
 					a.Name = plr.Name
 					a.Parent = ESPholder
@@ -9720,7 +9721,7 @@ addcmd('toolinvisible',{'toolinvis','tinvis'},function(args, speaker)
 	box.Position = Vector3.new(0,10000,0)
 	box.Parent = workspace
 	local boxTouched = box.Touched:connect(function(part)
-		if (part.Parent.Name == Players.LocalPlayer.Name) then
+		if part.Parent.Name == Players.LocalPlayer.Name then
 			if touched == false then
 				touched = true
 				local function apply()
@@ -10587,7 +10588,7 @@ addcmd('oldconsole',{},function(args, speaker)
 	end
 
 	local success, message = pcall(s)
-	if (not success) then
+	if not success then
 		if printconsole then
 			printconsole(message)
 		elseif printoutput then
@@ -12652,7 +12653,7 @@ addcmd("fakeout", {}, function(args, speaker)
 		execCmd("unantivoid nonotify")
 		antivoidWasEnabled = true
 	end
-	workspace.FallenPartsDestroyHeight = 0/1/0
+	workspace.FallenPartsDestroyHeight = -math.huge
 	root.CFrame = CFrame.new(Vector3.new(0, OrgDestroyHeight - 25, 0))
 	task.wait(1)
 	root.CFrame = oldpos
