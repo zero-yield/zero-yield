@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v2.5.2
+    hooks:
+      - id: stylua
+
+  - repo: local
+    hooks:
+      - id: selene
+        name: selene
+        entry: selene
+        language: system
+        types: [lua]
