@@ -2621,11 +2621,7 @@ eventEditor = (function()
 		local res = {}
 
 		for i,v in pairs(ev.sets) do
-			if v.Type == "Player" then
-				res[#res+1] = v.Default or 0
-			elseif v.Type == "String" then
-				res[#res+1] = v.Default or 0
-			elseif v.Type == "Number" then
+			if v.Type == "Player" or v.Type == "String" or v.Type == "Number" then
 				res[#res+1] = v.Default or 0
 			end
 		end
@@ -6285,20 +6281,14 @@ ZYMouse.Button1Down:Connect(function()
 	for i,v in pairs(binds) do
 		if v.COMMAND == 'clicktp' then
 			local input = v.KEY
-			if input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) and Players.LocalPlayer.Character then
-				clicktpFunc()
-			elseif input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) and Players.LocalPlayer.Character then
-				clicktpFunc()
-			elseif UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) and Players.LocalPlayer.Character then
-				clicktpFunc()
+			if (input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)) or (input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) or UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) then
+				if Players.LocalPlayer.Character then
+					clicktpFunc()
+				end
 			end
 		elseif v.COMMAND == 'clickdel' then
 			local input = v.KEY
-			if input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
-				pcall(function() ZYMouse.Target:Destroy() end)
-			elseif input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-				pcall(function() ZYMouse.Target:Destroy() end)
-			elseif UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) then
+			if (input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)) or (input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) or UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) then
 				pcall(function() ZYMouse.Target:Destroy() end)
 			end
 		end
@@ -10788,26 +10778,26 @@ addcmd("darkchat", {}, function(args, speaker)
     local CIBC = TextChatService:FindFirstChildOfClass("ChatInputBarConfiguration")
     if BCC then
         BCC.Enabled = true
-        BCC.BackgroundColor3 = Color3.fromRGB()
+        BCC.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         BCC.BackgroundTransparency = 0.3
         BCC.TailVisible = true
         BCC.TextColor3 = Color3.fromRGB(0xFF, 0xFF, 0xFF)
     end
     if CWC then
         CWC.Enabled = true
-        CWC.BackgroundColor3 = Color3.fromRGB()
+        CWC.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         CWC.BackgroundTransparency = 0.3
         CWC.TextColor3 = Color3.fromRGB(0xFF, 0xFF, 0xFF)
-        CWC.TextStrokeColor3 = Color3.fromRGB()
+        CWC.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
         CWC.TextStrokeTransparency = 0.5
     end
     if CIBC then
         CIBC.Enabled = true
-        CIBC.BackgroundColor3 = Color3.fromRGB()
+        CIBC.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         CIBC.BackgroundTransparency = 0.5
         CIBC.PlaceholderColor3 = Color3.fromRGB(0xFF, 0xFF, 0xFF)
         CIBC.TextColor3 = Color3.fromRGB(0xFF, 0xFF, 0xFF)
-        CIBC.TextStrokeColor3 = Color3.fromRGB()
+        CIBC.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
         CIBC.TextStrokeTransparency = 0.5
     end
 end)
@@ -11427,7 +11417,8 @@ addcmd('dupetools', {'clonetools'}, function(args, speaker)
 	local Tools, TempPos = {}, Vector3.new(math.random(-2e5, 2e5), 2e5, math.random(-2e5, 2e5))
 	for i = 1, LOOP_NUM do
 		local Human = speaker.Character:WaitForChild("Humanoid")
-		wait(.1, Human.Parent:MoveTo(TempPos))
+		Human.Parent:MoveTo(TempPos)
+		wait(.1)
 		Human.RootPart.Anchored = speaker:ClearCharacterAppearance(wait(.1)) or true
 		local t = GetHandleTools(speaker)
 		while #t > 0 do
@@ -13184,8 +13175,8 @@ updateColors(currentText1,text1)
 updateColors(currentText2,text2)
 updateColors(currentScroll,scroll)
 
-if PluginsTable ~= nil or PluginsTable ~= {} then
-	FindPlugins(PluginsTable)
+if PluginsTable ~= nil then
+	FindPlugins()
 end
 
 -- Events
