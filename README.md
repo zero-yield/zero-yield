@@ -13,6 +13,18 @@ loadstring(game:HttpGet("https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/
 
 Plugins for Zero Yield are `.zy` files to avoid confusion with Infinite Yield plugins. If you are using an `.iy` file and want to port it to Zero Yield, simply rename the file extension to: `.zy`.
 
+## Linting
+
+This project uses [selene](https://kampfkarren.github.io/selene/) for Lua linting with a custom standard library (`roblox_exploit.yml`) that extends the Roblox std lib with exploit-specific globals (e.g. `getgenv`, `cloneref`, `writefile`).
+
+To run the linter locally:
+
+```bash
+selene source
+```
+
+A GitHub Actions workflow (`.github/workflows/lint.yml`) runs selene automatically on pushes and pull requests.
+
 ## Credits
 
 This project is based on the original work by EdgeIY. The original project can be found [here](https://github.com/EdgeIY/infiniteyield).
