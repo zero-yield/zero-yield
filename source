@@ -4474,7 +4474,7 @@ CMDs = {}
 CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to the Zero Yield discord server. (aka Beignet Scripts)'}
 CMDs[#CMDs + 1] = {NAME = 'guiscale [number]', DESC = 'Changes the size of the gui. [number] accepts decimals and whole numbers. Min is 0.4 and Max is 2'}
 CMDs[#CMDs + 1] = {NAME = 'unc', DESC = 'Runs the UNC test suite to check your executor\'s UNC compatibility'}
-CMDs[#CMDs + 1] = {NAME = 'sunc', DESC = 'Runs the extended sUNC test suite to test your executor\'s UNC compatibility'}
+CMDs[#CMDs + 1] = {NAME = 'sunc', DESC = 'Runs the extended sUNC test suite to test your executor\'s UNC compatibility (NOTE: you need to join sUNC\'s testing game to run this!)'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Opens the Roblox console'}
 CMDs[#CMDs + 1] = {NAME = 'oldconsole', DESC = 'Loads an old-themed Roblox console'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens Dex++ by Chillz'}
