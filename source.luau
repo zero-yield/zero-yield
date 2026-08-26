@@ -283,7 +283,8 @@ join = Instance.new("Frame")
 Toggle_2 = Instance.new("TextButton")
 Clear_2 = Instance.new("TextButton")
 scroll_3 = Instance.new("ScrollingFrame")
-listlayout = Instance.new("UIListLayout",scroll_3)
+listlayout = Instance.new("UIListLayout")
+	listlayout.Parent = scroll_3
 selectChat = Instance.new("TextButton")
 selectJoin = Instance.new("TextButton")
 
@@ -2621,11 +2622,7 @@ eventEditor = (function()
 		local res = {}
 
 		for i,v in pairs(ev.sets) do
-			if v.Type == "Player" then
-				res[#res+1] = v.Default or 0
-			elseif v.Type == "String" then
-				res[#res+1] = v.Default or 0
-			elseif v.Type == "Number" then
+			if v.Type == "Player" or v.Type == "String" or v.Type == "Number" then
 				res[#res+1] = v.Default or 0
 			end
 		end
@@ -3385,7 +3382,7 @@ function CreateJoinLabel(plr,ID)
 end
 
 ZYMouse.KeyDown:Connect(function(Key)
-	if (Key==prefix) then
+	if Key==prefix then
 		RunService.RenderStepped:Wait()
 		Cmdbar:CaptureFocus()
 		maximizeHolder()
@@ -3430,7 +3427,7 @@ function updateColors(color,ctype)
 		for i,v in pairs(text1) do
 			v.TextColor3 = color
 			if v:IsA("TextBox") then
-				v.PlaceholderColor3 = color	
+				v.PlaceholderColor3 = color
 			end
 		end
 		currentText1 = color
@@ -3552,7 +3549,7 @@ ColorsButton.MouseButton1Click:Connect(function()
 				local function colorStripInput()
 					local relativeY = mouse.Y - colorStrip.AbsolutePosition.Y
 
-					if relativeY < 0 then relativeY = 0 elseif relativeY > 199 then relativeY = 199 end	
+					if relativeY < 0 then relativeY = 0 elseif relativeY > 199 then relativeY = 199 end
 
 					val = (199 - relativeY)/199
 
@@ -3768,7 +3765,7 @@ ColorsButton.MouseButton1Click:Connect(function()
 						local newColor = Color3.new(red,green,blue)
 						hue,sat,val = Color3.toHSV(newColor)
 						updateColor()
-					end)	
+					end)
 
 					newColor.Parent = basicColorsFrame
 					column = column + 1
@@ -3952,7 +3949,7 @@ end)
 
 selectJoin.MouseButton1Down:Connect(function()
 	chat.Visible = false
-	join.Visible = true	
+	join.Visible = true
 	table.remove(shade3,table.find(shade3,selectJoin))
 	table.remove(shade2,table.find(shade2,selectChat))
 	table.insert(shade2,selectJoin)
@@ -4976,7 +4973,7 @@ function FindInTable(tbl,val)
 	if tbl == nil then return false end
 	for _,v in pairs(tbl) do
 		if v == val then return true end
-	end 
+	end
 	return false
 end
 
@@ -5186,7 +5183,7 @@ function execCmd(cmdStr,speaker,store)
 			end
 		end
 	end)
-end	
+end
 
 function addcmd(name,alias,func,plgn)
 	cmds[#cmds+1]=
@@ -5453,7 +5450,7 @@ SpecialPlayerCases = {
 		local returns = {}
 		local groupID = tonumber(args[1])
 		for _,plr in pairs(Players:GetPlayers()) do
-			if plr:IsInGroup(groupID) then  
+			if plr:IsInGroup(groupID) then
 				table.insert(returns,plr)
 			end
 		end
@@ -5735,7 +5732,7 @@ function ESP(plr, logic)
 			ESPholder.Parent = COREGUI
 			repeat wait(1) until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 			for b,n in pairs (plr.Character:GetChildren()) do
-				if (n:IsA("BasePart")) then
+				if n:IsA("BasePart") then
 					local a = Instance.new("BoxHandleAdornment")
 					a.Name = plr.Name
 					a.Parent = ESPholder
@@ -5831,7 +5828,7 @@ function CHMS(plr)
 			ESPholder.Parent = COREGUI
 			repeat wait(1) until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 			for b,n in pairs (plr.Character:GetChildren()) do
-				if (n:IsA("BasePart")) then
+				if n:IsA("BasePart") then
 					local a = Instance.new("BoxHandleAdornment")
 					a.Name = plr.Name
 					a.Parent = ESPholder
@@ -5892,7 +5889,7 @@ function Locate(plr)
 			ESPholder.Parent = COREGUI
 			repeat wait(1) until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 			for b,n in pairs (plr.Character:GetChildren()) do
-				if (n:IsA("BasePart")) then
+				if n:IsA("BasePart") then
 					local a = Instance.new("BoxHandleAdornment")
 					a.Name = plr.Name
 					a.Parent = ESPholder
@@ -6272,7 +6269,7 @@ local function clicktpFunc()
 		local rootPartPosition = rootPart.Position
 		local hitPosition = ZYMouse.Hit.Position
 		local newCFrame = CFrame.new(
-			hitPosition, 
+			hitPosition,
 			Vector3.new(rootPartPosition.X, hitPosition.Y, rootPartPosition.Z)
 		) * CFrame.Angles(0, math.pi, 0)
 
@@ -6285,20 +6282,14 @@ ZYMouse.Button1Down:Connect(function()
 	for i,v in pairs(binds) do
 		if v.COMMAND == 'clicktp' then
 			local input = v.KEY
-			if input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) and Players.LocalPlayer.Character then
-				clicktpFunc()
-			elseif input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) and Players.LocalPlayer.Character then
-				clicktpFunc()
-			elseif UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) and Players.LocalPlayer.Character then
-				clicktpFunc()
+			if (input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)) or (input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) or UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) then
+				if Players.LocalPlayer.Character then
+					clicktpFunc()
+				end
 			end
 		elseif v.COMMAND == 'clickdel' then
 			local input = v.KEY
-			if input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
-				pcall(function() ZYMouse.Target:Destroy() end)
-			elseif input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-				pcall(function() ZYMouse.Target:Destroy() end)
-			elseif UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) then
+			if (input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)) or (input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)) or UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) then
 				pcall(function() ZYMouse.Target:Destroy() end)
 			end
 		end
@@ -6428,7 +6419,7 @@ function LoadPlugin(val,startup)
 		addcmdtext('',val)
 		addcmdtext(string.upper('--'..plugin["PluginName"]),val,plugin["PluginDescription"])
 		if plugin["Commands"] then
-			for i,v in pairs(plugin["Commands"]) do 
+			for i,v in pairs(plugin["Commands"]) do
 				local cmdExt = ''
 				local cmdName = i
 				local function handleNames()
@@ -6908,10 +6899,10 @@ addcmd('serverinfo',{'info','sinfo'},function(args, speaker)
 		table.insert(text1,CopyPlcName)
 
 		local SINFOGUI = background
-		FRAME:TweenPosition(UDim2.new(0.5, -130, 0, 100), "InOut", "Quart", 0.5, true, nil) 
+		FRAME:TweenPosition(UDim2.new(0.5, -130, 0, 100), "InOut", "Quart", 0.5, true, nil)
 		wait(0.5)
 		Exit.MouseButton1Click:Connect(function()
-			FRAME:TweenPosition(UDim2.new(0.5, -130, 0, -500), "InOut", "Quart", 0.5, true, nil) 
+			FRAME:TweenPosition(UDim2.new(0.5, -130, 0, -500), "InOut", "Quart", 0.5, true, nil)
 			wait(0.6)
 			FRAME:Destroy()
 			canOpenServerinfo = true
@@ -7413,7 +7404,7 @@ addcmd('float', {'platform'},function(args, speaker)
 	local pchar = speaker.Character
 	floatName = randomString()
 	floating = true
-	
+
 	if pchar and not pchar:FindFirstChild(floatName) then
 		task.spawn(function()
 			local floatPoint = -3.1
@@ -7423,9 +7414,9 @@ addcmd('float', {'platform'},function(args, speaker)
 			floatPart.Transparency = 1
 			floatPart.Size = Vector3.new(2, 0.2, 1.5)
 			floatPart.Anchored = true
-			
+
 			notify('Float', 'Started floating (Q = down & E = up)')
-			
+
 			beganListener = UserInputService.InputBegan:Connect(function(key, processed)
 				if processed then return end
 
@@ -7446,7 +7437,7 @@ addcmd('float', {'platform'},function(args, speaker)
 					floatPoint -= 1.5
 				end
 			end)
-			
+
 			floatDied = speaker.Character:FindFirstChildOfClass('Humanoid').Died:Connect(function()
 				floatingFunc:Disconnect()
 				floatPart:Destroy()
@@ -7466,7 +7457,7 @@ addcmd('float', {'platform'},function(args, speaker)
 					endListener:Disconnect()
 					floatName = nil
 				end
-			end			
+			end
 			floatingFunc = RunService.PreAnimation:Connect(floatPadLoop)
 		end)
 	end
@@ -7561,7 +7552,7 @@ addcmd('setwaypoint',{'swp','setwp','spos','saveposition','savepos'},function(ar
 		if AllWaypoints ~= nil then
 			AllWaypoints[#AllWaypoints + 1] = {NAME = WPName, COORD = {math.floor(torso.Position.X), math.floor(torso.Position.Y), math.floor(torso.Position.Z)}, GAME = PlaceId}
 		end
-	end	
+	end
 	refreshwaypoints()
 	updatesaves()
 end)
@@ -7574,7 +7565,7 @@ addcmd('waypointpos',{'wpp','setwaypointposition','setpos','setwaypoint','setway
 		if AllWaypoints ~= nil then
 			AllWaypoints[#AllWaypoints + 1] = {NAME = WPName, COORD = {args[2], args[3], args[4]}, GAME = PlaceId}
 		end
-	end	
+	end
 	refreshwaypoints()
 	updatesaves()
 end)
@@ -7945,7 +7936,7 @@ addcmd("unantigameplaypaused", {}, function(args, speaker)
 end)
 
 addcmd('clientantikick',{'antikick'},function(args, speaker)
-	if not hookmetamethod then 
+	if not hookmetamethod then
 		return notify('Incompatible Exploit','Your exploit does not support this command (missing hookmetamethod)')
 	end
 	local LocalPlayer = Players.LocalPlayer
@@ -7968,7 +7959,7 @@ end)
 
 allow_rj = true
 addcmd('clientantiteleport',{'antiteleport'},function(args, speaker)
-	if not hookmetamethod then 
+	if not hookmetamethod then
 		return notify('Incompatible Exploit','Your exploit does not support this command (missing hookmetamethod)')
 	end
 
@@ -7983,7 +7974,7 @@ addcmd('clientantiteleport',{'antiteleport'},function(args, speaker)
 			error("Argument 1 missing or nil", 2)
 		end
 		if typeof(placeId) ~= "number" and placeId ~= true then
-			error(`Unable to cast {typeof(placeId)} to int64`, 2)
+			error("Unable to cast {typeof(placeId)} to int64", 2)
 		elseif placeId == true then
 			-- somehow raise raiseTeleportInitFailedEvent
 			return
@@ -8021,7 +8012,7 @@ end)
 
 addcmd('allowrejoin',{'allowrj'},function(args, speaker)
 	allow_rj = not allow_rj
-	notify("Client AntiTP", `Scripts now may{allow_rj and "" or " not"} make you rejoin the server`)
+	notify("Client AntiTP", "Scripts now may" .. (allow_rj and "" or " not") .. " make you rejoin the server")
 end)
 
 addcmd("cancelteleport", {"canceltp"}, function(args, speaker)
@@ -8703,8 +8694,8 @@ addcmd('fixcam',{'restorecam'},function(args, speaker)
 end)
 
 addcmd("enableshiftlock", {"enablesl", "shiftlock"}, function(args, speaker)
-	local function enableShiftlock() 
-		speaker.DevEnableMouseLock = true 
+	local function enableShiftlock()
+		speaker.DevEnableMouseLock = true
 	end
 	speaker:GetPropertyChangedSignal("DevEnableMouseLock"):Connect(enableShiftlock)
 	enableShiftlock()
@@ -8768,7 +8759,7 @@ addcmd('unlockws',{'unlockworkspace'},function(args, speaker)
 	end
 end)
 
-addcmd('lockws',{'lockworkspace'},function(args, speaker) 
+addcmd('lockws',{'lockworkspace'},function(args, speaker)
 	for i,v in pairs(workspace:GetDescendants()) do
 		if v:IsA("BasePart") then
 			v.Locked = true
@@ -9251,7 +9242,7 @@ addcmd('loopbring',{},function(args, speaker)
 								getRoot(pchar).CFrame = getRoot(speaker.Character).CFrame + Vector3.new(distance,1,0)
 							end
 							wait(lDelay)
-						else 
+						else
 							for a,b in pairs(bringT) do if b == plrName then table.remove(bringT, a) end end
 						end
 					end
@@ -9305,16 +9296,16 @@ addcmd('pathfindwalkto',{'pathfindfollow'},function(args, speaker)
 				local success, response = pcall(function()
 					path:ComputeAsync(getRoot(speaker.Character).Position, getRoot(Players[v].Character).Position)
 					local waypoints = path:GetWaypoints()
-					local distance 
+					local distance
 					for waypointIndex, waypoint in pairs(waypoints) do
 						local waypointPosition = waypoint.Position
 						hum:MoveTo(waypointPosition)
-						repeat 
+						repeat
 							distance = (waypointPosition - hum.Parent.PrimaryPart.Position).magnitude
 							wait()
 						until
 						distance <= 5
-					end	 
+					end
 				end)
 				if not success then
 					speaker.Character:FindFirstChildOfClass('Humanoid'):MoveTo(getRoot(Players[v].Character).Position)
@@ -9343,11 +9334,11 @@ addcmd('pathfindwalktowaypoint',{'pathfindwalktowp'},function(args, speaker)
 					local success, response = pcall(function()
 						path:ComputeAsync(getRoot(speaker.Character).Position, TrueCoords)
 						local waypoints = path:GetWaypoints()
-						local distance 
+						local distance
 						for waypointIndex, waypoint in pairs(waypoints) do
 							local waypointPosition = waypoint.Position
 							hum:MoveTo(waypointPosition)
-							repeat 
+							repeat
 								distance = (waypointPosition - hum.Parent.PrimaryPart.Position).magnitude
 								wait()
 							until
@@ -9372,11 +9363,11 @@ addcmd('pathfindwalktowaypoint',{'pathfindwalktowp'},function(args, speaker)
 					local success, response = pcall(function()
 						path:ComputeAsync(getRoot(speaker.Character).Position, TrueCoords)
 						local waypoints = path:GetWaypoints()
-						local distance 
+						local distance
 						for waypointIndex, waypoint in pairs(waypoints) do
 							local waypointPosition = waypoint.Position
 							hum:MoveTo(waypointPosition)
-							repeat 
+							repeat
 								distance = (waypointPosition - hum.Parent.PrimaryPart.Position).magnitude
 								wait()
 							until
@@ -9730,7 +9721,7 @@ addcmd('toolinvisible',{'toolinvis','tinvis'},function(args, speaker)
 	box.Position = Vector3.new(0,10000,0)
 	box.Parent = workspace
 	local boxTouched = box.Touched:connect(function(part)
-		if (part.Parent.Name == Players.LocalPlayer.Name) then
+		if part.Parent.Name == Players.LocalPlayer.Name then
 			if touched == false then
 				touched = true
 				local function apply()
@@ -10597,7 +10588,7 @@ addcmd('oldconsole',{},function(args, speaker)
 	end
 
 	local success, message = pcall(s)
-	if (not success) then
+	if not success then
 		if printconsole then
 			printconsole(message)
 		elseif printoutput then
@@ -10788,26 +10779,26 @@ addcmd("darkchat", {}, function(args, speaker)
     local CIBC = TextChatService:FindFirstChildOfClass("ChatInputBarConfiguration")
     if BCC then
         BCC.Enabled = true
-        BCC.BackgroundColor3 = Color3.fromRGB()
+        BCC.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         BCC.BackgroundTransparency = 0.3
         BCC.TailVisible = true
         BCC.TextColor3 = Color3.fromRGB(0xFF, 0xFF, 0xFF)
     end
     if CWC then
         CWC.Enabled = true
-        CWC.BackgroundColor3 = Color3.fromRGB()
+        CWC.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         CWC.BackgroundTransparency = 0.3
         CWC.TextColor3 = Color3.fromRGB(0xFF, 0xFF, 0xFF)
-        CWC.TextStrokeColor3 = Color3.fromRGB()
+        CWC.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
         CWC.TextStrokeTransparency = 0.5
     end
     if CIBC then
         CIBC.Enabled = true
-        CIBC.BackgroundColor3 = Color3.fromRGB()
+        CIBC.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         CIBC.BackgroundTransparency = 0.5
         CIBC.PlaceholderColor3 = Color3.fromRGB(0xFF, 0xFF, 0xFF)
         CIBC.TextColor3 = Color3.fromRGB(0xFF, 0xFF, 0xFF)
-        CIBC.TextStrokeColor3 = Color3.fromRGB()
+        CIBC.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
         CIBC.TextStrokeTransparency = 0.5
     end
 end)
@@ -11140,8 +11131,8 @@ addcmd('grabtools', {}, function(args, speaker)
 		end
 	end
 
-	if grabtoolsFunc then 
-		grabtoolsFunc:Disconnect() 
+	if grabtoolsFunc then
+		grabtoolsFunc:Disconnect()
 	end
 
 	grabtoolsFunc = workspace.ChildAdded:Connect(function(child)
@@ -11154,8 +11145,8 @@ addcmd('grabtools', {}, function(args, speaker)
 end)
 
 addcmd('nograbtools',{'ungrabtools'},function(args, speaker)
-	if grabtoolsFunc then 
-		grabtoolsFunc:Disconnect() 
+	if grabtoolsFunc then
+		grabtoolsFunc:Disconnect()
 	end
 
 	notify("Grabtools", "Grabtools has been disabled")
@@ -11335,7 +11326,7 @@ addcmd('clearhats',{'cleanhats'},function(args, speaker)
 
 		Player.CharacterAdded:Wait()
 
-		for i = 1,20 do 
+		for i = 1,20 do
 			RunService.Heartbeat:Wait()
 			if getRoot(Player.Character) then
 				getRoot(Player.Character).Humanoid.RootPart.CFrame = Old
@@ -11427,7 +11418,8 @@ addcmd('dupetools', {'clonetools'}, function(args, speaker)
 	local Tools, TempPos = {}, Vector3.new(math.random(-2e5, 2e5), 2e5, math.random(-2e5, 2e5))
 	for i = 1, LOOP_NUM do
 		local Human = speaker.Character:WaitForChild("Humanoid")
-		wait(.1, Human.Parent:MoveTo(TempPos))
+		Human.Parent:MoveTo(TempPos)
+		wait(.1)
 		Human.RootPart.Anchored = speaker:ClearCharacterAppearance(wait(.1)) or true
 		local t = GetHandleTools(speaker)
 		while #t > 0 do
@@ -11785,7 +11777,7 @@ end)
 addcmd("joinlogs", {"jlogs"}, function(args, speaker)
 	jLogsEnabled = true
 	chat.Visible = false
-	join.Visible = true	
+	join.Visible = true
 	table.remove(shade3, table.find(shade3, selectJoin))
 	table.remove(shade2, table.find(shade2, selectChat))
 	table.insert(shade2, selectJoin)
@@ -12661,7 +12653,7 @@ addcmd("fakeout", {}, function(args, speaker)
 		execCmd("unantivoid nonotify")
 		antivoidWasEnabled = true
 	end
-	workspace.FallenPartsDestroyHeight = 0/1/0
+	workspace.FallenPartsDestroyHeight = -math.huge
 	root.CFrame = CFrame.new(Vector3.new(0, OrgDestroyHeight - 25, 0))
 	task.wait(1)
 	root.CFrame = oldpos
@@ -13184,8 +13176,8 @@ updateColors(currentText1,text1)
 updateColors(currentText2,text2)
 updateColors(currentScroll,scroll)
 
-if PluginsTable ~= nil or PluginsTable ~= {} then
-	FindPlugins(PluginsTable)
+if PluginsTable ~= nil then
+	FindPlugins()
 end
 
 -- Events
@@ -13327,7 +13319,7 @@ CaptureService.CaptureEnded:Connect(function()
 end)
 
 task.spawn(function()
-	local success, latestVersionInfo = pcall(function() 
+	local success, latestVersionInfo = pcall(function()
 		local versionJson = game:HttpGet("https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/master/version")
 		return HttpService:JSONDecode(versionJson)
 	end)
