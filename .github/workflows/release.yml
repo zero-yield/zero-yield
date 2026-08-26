@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v6
+        with:
+          extra_plugins: |
+            @semantic-release/exec
+            @semantic-release/git
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}

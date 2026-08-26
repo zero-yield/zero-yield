@@ -15,6 +15,15 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Generate GitHub App Token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Get short commit hash
         id: vars
@@ -24,7 +33,7 @@ jobs:
       - uses: jacklebeignet/setup-darklua@v1
         with:
           version: latest
-      
+
       - name: Prepare source
         run: |
           mkdir -p /tmp/devbuild
@@ -78,4 +87,4 @@ jobs:
             -m "Build ${{ steps.vars.outputs.sha_short }}"
 
           # Push
-          git push origin builds
+          git push https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git builds
