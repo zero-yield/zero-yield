@@ -4,8 +4,8 @@ import fs from "fs";
 const version = process.argv[2];
 
 if (!version) {
-  console.error('Usage: node update-version.js <version>');
-  process.exit(1);
+    console.error('Usage: node update-version.js <version>');
+    process.exit(1);
 }
 
 const file = 'version';
