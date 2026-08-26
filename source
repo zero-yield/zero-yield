@@ -1,9 +1,9 @@
-if IY_LOADED and not _G.IY_DEBUG then
+if ZY_LOADED and not _G.ZY_DEBUG then
 	-- error("Zero Yield is already running!", 0)
 	return
 end
 
-pcall(function() getgenv().IY_LOADED = true end)
+pcall(function() getgenv().ZY_LOADED = true end)
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 function missing(t, f, fallback)
@@ -93,7 +93,7 @@ SocialService = Services.SocialService
 
 PlayerGui = cloneref(Players.LocalPlayer:FindFirstChildWhichIsA("PlayerGui"))
 COREGUI = Services.CoreGui or PlayerGui
-IYMouse = cloneref(Players.LocalPlayer:GetMouse())
+ZYMouse = cloneref(Players.LocalPlayer:GetMouse())
 PlaceId, JobId = game.PlaceId, game.JobId
 xpcall(function()
 	IsOnMobile = table.find({Enum.Platform.Android, Enum.Platform.IOS}, UserInputService:GetPlatform())
@@ -106,7 +106,7 @@ isLegacyChat = TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService
 end)) or false]]
 
 -- xylex & europa
-local iyassets = {
+local zyassets = {
 	["zeroyield/assets/bindsandplugins.png"] = "rbxassetid://5147695474",
 	["zeroyield/assets/close.png"] = "rbxassetid://5054663650",
 	["zeroyield/assets/editaliases.png"] = "rbxassetid://5147488658",
@@ -130,7 +130,7 @@ local function getcustomasset(asset)
 			return result
 		end
 	end
-	return iyassets[asset]
+	return zyassets[asset]
 end
 
 if makefolder and isfolder and writefile and isfile then
@@ -141,7 +141,7 @@ if makefolder and isfolder and writefile and isfile then
 				makefolder(folder)
 			end
 		end
-		for path in iyassets do
+		for path in zyassets do
 			if not isfile(path) then
 				writefile(path, game:HttpGet((path:gsub("zeroyield/", assets))))
 			end
@@ -1525,7 +1525,7 @@ About.Position = UDim2.new(0, 17, 0, 10)
 About.Size = UDim2.new(0, 187, 0, 49)
 About.Font = Enum.Font.SourceSans
 About.TextSize = 14
-About.Text = "Plugins are .iy files and should be located in the 'workspace' folder of your exploit."
+About.Text = "Plugins are .zy files and should be located in the 'workspace' folder of your exploit."
 About.TextColor3 = Color3.fromRGB(255, 255, 255)
 About.TextWrapped = true
 About.TextYAlignment = Enum.TextYAlignment.Top
@@ -1606,7 +1606,7 @@ PluginsHint.Position = UDim2.new(0, 25, 0, 40)
 PluginsHint.Size = UDim2.new(0, 200, 0, 50)
 PluginsHint.Font = Enum.Font.SourceSansItalic
 PluginsHint.TextSize = 16
-PluginsHint.Text = "Download plugins from the IY Discord (discord.gg/78ZuWSq)"
+PluginsHint.Text = "Download plugins from the ZY Discord (discord.gg/78ZuWSq)"
 PluginsHint.TextColor3 = Color3.new(1, 1, 1)
 PluginsHint.TextStrokeColor3 = Color3.new(1, 1, 1)
 PluginsHint.TextWrapped = true
@@ -2881,7 +2881,7 @@ reference = (function()
 		{111,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Text",Parent={105},Position=UDim2.new(0,8,0,148),Size=UDim2.new(1,-8,0,16),Text="Setting up 'goto $1' on the OnChatted event will teleport you to any player that chats.",TextColor3=Color3.new(1,1,1),TextSize=14,TextWrapped=true,TextXAlignment=0,TextYAlignment=0,ZIndex=10,}},
 		{112,"Frame",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Name="Section",Parent={7},Size=UDim2.new(1,0,0,105),ZIndex=10,}},
 		{113,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=4,Name="Header",Parent={112},Position=UDim2.new(0,8,0,5),Size=UDim2.new(1,-8,0,20),Text="Get Further Help",TextColor3=Color3.new(1,1,1),TextSize=20,TextXAlignment=0,ZIndex=10,}},
-		{114,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Text",Parent={112},Position=UDim2.new(0,8,0,30),Size=UDim2.new(1,-8,0,32),Text="You can join the Discord server to get support with IY,  and read up on more documentation such as the Plugin API.",TextColor3=Color3.new(1,1,1),TextSize=14,TextWrapped=true,TextXAlignment=0,ZIndex=10,}},
+		{114,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Text",Parent={112},Position=UDim2.new(0,8,0,30),Size=UDim2.new(1,-8,0,32),Text="You can join the Discord server to get support with ZY,  and read up on more documentation such as the Plugin API.",TextColor3=Color3.new(1,1,1),TextSize=14,TextWrapped=true,TextXAlignment=0,ZIndex=10,}},
 		{115,"Frame",{BackgroundColor3=Color3.new(0.1803921610117,0.1803921610117,0.1843137294054),BorderSizePixel=0,Name="Line",Parent={112},Position=UDim2.new(0,10,1,-1),Size=UDim2.new(1,-20,0,1),Visible=false,ZIndex=10,}},
 		{116,"TextButton",{BackgroundColor3=Color3.new(0.48627451062202,0.61960786581039,0.85098040103912),BorderColor3=Color3.new(0.1803921610117,0.1803921610117,0.1843137294054),Font=4,Name="InviteButton",Parent={112},Position=UDim2.new(0,5,0,75),Size=UDim2.new(1,-10,0,25),Text="Copy Discord Invite Link (https://discord.gg/sc5tfyEUqD)",TextColor3=Color3.new(0.1803921610117,0.1803921610117,0.1843137294054),TextSize=16,ZIndex=10,}},
 	})
@@ -2933,7 +2933,7 @@ defaultsettings = {
 	StayOpen = false;
 	guiScale = defaultGuiScale;
 	espTransparency = 0.3;
-	keepIY = true;
+	keepZY = true;
 	logsEnabled = false;
 	jLogsEnabled = false;
 	aliases = {};
@@ -3054,7 +3054,7 @@ local loadedEventData = nil
 local jsonAttempts = 0
 function saves()
 	if writefileExploit() and readfileExploit() and jsonAttempts < 10 then
-		local readSuccess, out = readfile("IY_FE.iy", true)
+		local readSuccess, out = readfile("ZY_FE.zy", true)
 		if readSuccess then
 			if out ~= nil and tostring(out):gsub("%s", "") ~= "" then
 				local success, response = pcall(function()
@@ -3062,7 +3062,7 @@ function saves()
 					if vtype(json.prefix, "string") then prefix = json.prefix else prefix = ';' end
 					if vtype(json.StayOpen, "boolean") then StayOpen = json.StayOpen else StayOpen = false end
 					if vtype(json.guiScale, "number") then guiScale = json.guiScale else guiScale = defaultGuiScale end
-					if vtype(json.keepIY, "boolean") then KeepInfYield = json.keepIY else KeepInfYield = true end
+					if vtype(json.keepZY, "boolean") then KeepInfYield = json.keepZY else KeepInfYield = true end
 					if vtype(json.espTransparency, "number") then espTransparency = json.espTransparency else espTransparency = 0.3 end
 					if vtype(json.logsEnabled, "boolean") then logsEnabled = json.logsEnabled else logsEnabled = false end
 					if vtype(json.jLogsEnabled, "boolean") then jLogsEnabled = json.jLogsEnabled else jLogsEnabled = false end
@@ -3084,14 +3084,14 @@ function saves()
 					jsonAttempts = jsonAttempts + 1
 					warn("Save Json Error:", response)
 					warn("Overwriting Save File")
-					writefile("IY_FE.iy", defaults, true)
+					writefile("ZY_FE.zy", defaults, true)
 					wait()
 					saves()
 				end
 			else
-				writefile("IY_FE.iy", defaults, true)
+				writefile("ZY_FE.zy", defaults, true)
 				wait()
-				local dReadSuccess, dOut = readfile("IY_FE.iy", true)
+				local dReadSuccess, dOut = readfile("ZY_FE.zy", true)
 				if dReadSuccess and dOut ~= nil and tostring(dOut):gsub("%s", "") ~= "" then
 					saves()
 				else
@@ -3101,9 +3101,9 @@ function saves()
 				end
 			end
 		else
-			writefile("IY_FE.iy", defaults, true)
+			writefile("ZY_FE.zy", defaults, true)
 			wait()
-			local dReadSuccess, dOut = readfile("IY_FE.iy", true)
+			local dReadSuccess, dOut = readfile("ZY_FE.zy", true)
 			if dReadSuccess and dOut ~= nil and tostring(dOut):gsub("%s", "") ~= "" then
 				saves()
 			else
@@ -3132,7 +3132,7 @@ function updatesaves()
 			prefix = prefix;
 			StayOpen = StayOpen;
 			guiScale = guiScale;
-			keepIY = KeepInfYield;
+			keepZY = KeepInfYield;
 			espTransparency = espTransparency;
 			logsEnabled = logsEnabled;
 			jLogsEnabled = jLogsEnabled;
@@ -3149,7 +3149,7 @@ function updatesaves()
 			currentScroll = {currentScroll.R,currentScroll.G,currentScroll.B};
 			eventBinds = eventEditor.SaveData()
 		}
-		writefileCooldown("IY_FE.iy", HttpService:JSONEncode(update))
+		writefileCooldown("ZY_FE.zy", HttpService:JSONEncode(update))
 	end
 end
 
@@ -3170,7 +3170,7 @@ if type(binds) ~= "table" then binds = {} end
 
 if type(PluginsTable) == "table" then
 	for i = #PluginsTable, 1, -1 do
-		if string.sub(PluginsTable[i], -3) ~= ".iy" then
+		if string.sub(PluginsTable[i], -3) ~= ".zy" then
 			table.remove(PluginsTable, i)
 		end
 	end
@@ -3384,7 +3384,7 @@ function CreateJoinLabel(plr,ID)
 	info2.Text = string.gsub(info2.Text, "Loading...",splitDates[2].."/"..splitDates[3].."/"..splitDates[1])
 end
 
-IYMouse.KeyDown:Connect(function(Key)
+ZYMouse.KeyDown:Connect(function(Key)
 	if (Key==prefix) then
 		RunService.RenderStepped:Wait()
 		Cmdbar:CaptureFocus()
@@ -3496,7 +3496,7 @@ ColorsButton.MouseButton1Click:Connect(function()
 				local greenInput = pickerFrame.Green.Input
 				local blueInput = pickerFrame.Blue.Input
 
-				local mouse = IYMouse
+				local mouse = ZYMouse
 
 				local hue,sat,val = 0,0,1
 				local red,green,blue = 1,1,1
@@ -4150,20 +4150,20 @@ local ClickSelect = nil
 function selectPart()
 	ToPartFrame:TweenPosition(UDim2.new(0.5, -180, 0, 335), "InOut", "Quart", 0.5, true, nil)
 	local function HighlightPart()
-		if selected.Adornee ~= IYMouse.Target then
-			selectionBox.Adornee = IYMouse.Target
+		if selected.Adornee ~= ZYMouse.Target then
+			selectionBox.Adornee = ZYMouse.Target
 		else
 			selectionBox.Adornee = nil
 		end
 	end
-	ActivateHighlight = IYMouse.Move:Connect(HighlightPart)
+	ActivateHighlight = ZYMouse.Move:Connect(HighlightPart)
 	local function SelectPart()
-		if IYMouse.Target ~= nil then
-			selected.Adornee = IYMouse.Target
-			Path.Text = getHierarchy(IYMouse.Target)
+		if ZYMouse.Target ~= nil then
+			selected.Adornee = ZYMouse.Target
+			Path.Text = getHierarchy(ZYMouse.Target)
 		end
 	end
-	ClickSelect = IYMouse.Button1Down:Connect(SelectPart)
+	ClickSelect = ZYMouse.Button1Down:Connect(SelectPart)
 end
 
 Part.MouseButton1Click:Connect(function()
@@ -4504,11 +4504,11 @@ CMDs[#CMDs + 1] = {NAME = 'hideguis', DESC = 'Hides any GUIs in PlayerGui'}
 CMDs[#CMDs + 1] = {NAME = 'unhideguis', DESC = 'Undoes hideguis'}
 CMDs[#CMDs + 1] = {NAME = 'guidelete', DESC = 'Enables backspace to delete GUI'}
 CMDs[#CMDs + 1] = {NAME = 'unguidelete / noguidelete', DESC = 'Disables guidelete'}
-CMDs[#CMDs + 1] = {NAME = 'hideiy', DESC = 'Hides the main IY GUI'}
-CMDs[#CMDs + 1] = {NAME = 'showiy / unhideiy', DESC = 'Shows IY again'}
-CMDs[#CMDs + 1] = {NAME = 'keepiy', DESC = 'Auto execute IY when you teleport through servers'}
-CMDs[#CMDs + 1] = {NAME = 'unkeepiy', DESC = 'Disable keepiy'}
-CMDs[#CMDs + 1] = {NAME = 'togglekeepiy', DESC = 'Toggles keepiy'}
+CMDs[#CMDs + 1] = {NAME = 'hidezy', DESC = 'Hides the main ZY GUI'}
+CMDs[#CMDs + 1] = {NAME = 'showzy / unhidezy', DESC = 'Shows ZY again'}
+CMDs[#CMDs + 1] = {NAME = 'keepzy', DESC = 'Auto execute ZY when you teleport through servers'}
+CMDs[#CMDs + 1] = {NAME = 'unkeepzy', DESC = 'Disable keepzy'}
+CMDs[#CMDs + 1] = {NAME = 'togglekeepzy', DESC = 'Toggles keepzy'}
 CMDs[#CMDs + 1] = {NAME = 'removeads / adblock', DESC = 'Automatically removes ad billboards'}
 CMDs[#CMDs + 1] = {NAME = 'savegame / saveplace', DESC = 'Uses saveinstance to save the game'}
 CMDs[#CMDs + 1] = {NAME = 'clearerror', DESC = 'Clears the annoying box and blur when a game kicks you'}
@@ -4934,7 +4934,7 @@ IndexContents("", true)
 
 function checkTT()
 	local t
-	local guisAtPosition = COREGUI:GetGuiObjectsAtPosition(IYMouse.X, IYMouse.Y)
+	local guisAtPosition = COREGUI:GetGuiObjectsAtPosition(ZYMouse.X, ZYMouse.Y)
 
 	for _, gui in pairs(guisAtPosition) do
 		if gui.Parent == CMDsF then
@@ -4943,16 +4943,16 @@ function checkTT()
 	end
 
 	if t ~= nil and t:GetAttribute("Title") ~= nil then
-		local x = IYMouse.X
-		local y = IYMouse.Y
+		local x = ZYMouse.X
+		local y = ZYMouse.Y
 		local xP
 		local yP
-		if IYMouse.X > 200 then
+		if ZYMouse.X > 200 then
 			xP = x - 201
 		else
 			xP = x + 21
 		end
-		if IYMouse.Y > (IYMouse.ViewSizeY-96) then
+		if ZYMouse.Y > (ZYMouse.ViewSizeY-96) then
 			yP = y - 97
 		else
 			yP = y
@@ -5164,7 +5164,7 @@ function execCmd(cmdStr,speaker,store)
 				if infTimes then
 					while lastBreakTime < cmdStartTime do
 						local success,err = pcall(cmd.FUNC,args, speaker)
-						if not success and _G.IY_DEBUG then
+						if not success and _G.ZY_DEBUG then
 							warn("Command Error:", cmdName, err)
 						end
 						wait(cmdDelay)
@@ -5175,7 +5175,7 @@ function execCmd(cmdStr,speaker,store)
 						local success,err = pcall(function()
 							cmd.FUNC(args, speaker)
 						end)
-						if not success and _G.IY_DEBUG then
+						if not success and _G.ZY_DEBUG then
 							warn("Command Error:", cmdName, err)
 						end
 						if cmdDelay ~= 0 then wait(cmdDelay) end
@@ -5266,7 +5266,7 @@ local WorldToScreen = function(Object)
 end
 
 local MousePositionToVector2 = function()
-	return Vector2.new(IYMouse.X, IYMouse.Y)
+	return Vector2.new(ZYMouse.X, ZYMouse.Y)
 end
 
 local GetClosestPlayerFromCursor = function()
@@ -6268,7 +6268,7 @@ local function clicktpFunc()
 		local hipHeight = humanoid and humanoid.HipHeight > 0 and (humanoid.HipHeight + 1)
 		local rootPart = getRoot(character)
 		local rootPartPosition = rootPart.Position
-		local hitPosition = IYMouse.Hit.Position
+		local hitPosition = ZYMouse.Hit.Position
 		local newCFrame = CFrame.new(
 			hitPosition, 
 			Vector3.new(rootPartPosition.X, hitPosition.Y, rootPartPosition.Z)
@@ -6279,7 +6279,7 @@ local function clicktpFunc()
 	end)
 end
 
-IYMouse.Button1Down:Connect(function()
+ZYMouse.Button1Down:Connect(function()
 	for i,v in pairs(binds) do
 		if v.COMMAND == 'clicktp' then
 			local input = v.KEY
@@ -6293,11 +6293,11 @@ IYMouse.Button1Down:Connect(function()
 		elseif v.COMMAND == 'clickdel' then
 			local input = v.KEY
 			if input == 'RightClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
-				pcall(function() IYMouse.Target:Destroy() end)
+				pcall(function() ZYMouse.Target:Destroy() end)
 			elseif input == 'LeftClick' and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-				pcall(function() IYMouse.Target:Destroy() end)
+				pcall(function() ZYMouse.Target:Destroy() end)
 			elseif UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)]) then
-				pcall(function() IYMouse.Target:Destroy() end)
+				pcall(function() ZYMouse.Target:Destroy() end)
 			end
 		end
 	end
@@ -6306,17 +6306,17 @@ end)
 PluginsGUI = PluginEditor.background
 
 function addPlugin(name)
-	if name:lower() == 'plugin file name' or name:lower() == 'iy_fe.iy' or name == 'iy_fe' then
+	if name:lower() == 'plugin file name' or name:lower() == 'zy_fe.zy' or name == 'zy_fe' then
 		notify('Plugin Error','Please enter a valid plugin')
 	else
 		local file
 		local fileName
-		if name:sub(-3) == '.iy' then
+		if name:sub(-3) == '.zy' then
 			pcall(function() file = readfile(name) end)
 			fileName = name
 		else
-			pcall(function() file = readfile(name..'.iy') end)
-			fileName = name..'.iy'
+			pcall(function() file = readfile(name..'.zy') end)
+			fileName = name..'.zy'
 		end
 		if file then
 			if not FindInTable(PluginsTable, fileName) then
@@ -6334,8 +6334,8 @@ function addPlugin(name)
 end
 
 function deletePlugin(name)
-	local pName = name..'.iy'
-	if name:sub(-3) == '.iy' then
+	local pName = name..'.zy'
+	if name:sub(-3) == '.zy' then
 		pName = name
 	end
 	for i = #cmds,1,-1 do
@@ -6572,27 +6572,27 @@ addcmd('discord', {'support', 'help'}, function(args, speaker)
 	end
 end)
 
-addcmd('keepiy', {}, function(args, speaker)
+addcmd('keepzy', {}, function(args, speaker)
 	if queueteleport then
 		KeepInfYield = true
-		notify('KeepIY','Zero Yield will now run after you teleport')
+		notify('KeepZY','Zero Yield will now run after you teleport')
 		updatesaves()
 	else
 		notify('Incompatible Exploit','Your exploit does not support this command (missing queue_on_teleport)')
 	end
 end)
 
-addcmd('unkeepiy', {}, function(args, speaker)
+addcmd('unkeepzy', {}, function(args, speaker)
 	if queueteleport then
 		KeepInfYield = false
-		notify('KeepIY','Zero Yield will no longer run after you teleport')
+		notify('KeepZY','Zero Yield will no longer run after you teleport')
 		updatesaves()
 	else
 		notify('Incompatible Exploit','Your exploit does not support this command (missing queue_on_teleport)')
 	end
 end)
 
-addcmd('togglekeepiy', {}, function(args, speaker)
+addcmd('togglekeepzy', {}, function(args, speaker)
 	if queueteleport then
 		KeepInfYield = not KeepInfYield
 		updatesaves()
@@ -7071,7 +7071,7 @@ end)
 
 FLYING = false
 QEfly = true
-iyflyspeed = 1
+zyflyspeed = 1
 vehicleflyspeed = 1
 function sFLY(vfly)
 	local plr = Players.LocalPlayer
@@ -7138,17 +7138,17 @@ function sFLY(vfly)
 	flyKeyDown = UserInputService.InputBegan:Connect(function(input, processed)
 		if processed then return end
 		if input.KeyCode == Enum.KeyCode.W then
-			CONTROL.F = (vfly and vehicleflyspeed or iyflyspeed)
+			CONTROL.F = (vfly and vehicleflyspeed or zyflyspeed)
 		elseif input.KeyCode == Enum.KeyCode.S then
-			CONTROL.B = - (vfly and vehicleflyspeed or iyflyspeed)
+			CONTROL.B = - (vfly and vehicleflyspeed or zyflyspeed)
 		elseif input.KeyCode == Enum.KeyCode.A then
-			CONTROL.L = - (vfly and vehicleflyspeed or iyflyspeed)
+			CONTROL.L = - (vfly and vehicleflyspeed or zyflyspeed)
 		elseif input.KeyCode == Enum.KeyCode.D then
-			CONTROL.R = (vfly and vehicleflyspeed or iyflyspeed)
+			CONTROL.R = (vfly and vehicleflyspeed or zyflyspeed)
 		elseif input.KeyCode == Enum.KeyCode.E and QEfly then
-			CONTROL.Q = (vfly and vehicleflyspeed or iyflyspeed)*2
+			CONTROL.Q = (vfly and vehicleflyspeed or zyflyspeed)*2
 		elseif input.KeyCode == Enum.KeyCode.Q and QEfly then
-			CONTROL.E = -(vfly and vehicleflyspeed or iyflyspeed)*2
+			CONTROL.E = -(vfly and vehicleflyspeed or zyflyspeed)*2
 		end
 		pcall(function() camera.CameraType = Enum.CameraType.Track end)
 	end)
@@ -7253,16 +7253,16 @@ local mobilefly = function(speaker, vfly)
 
 			local direction = controlModule:GetMoveVector()
 			if direction.X > 0 then
-				VelocityHandler.Velocity = VelocityHandler.Velocity + camera.CFrame.RightVector * (direction.X * ((vfly and vehicleflyspeed or iyflyspeed) * 50))
+				VelocityHandler.Velocity = VelocityHandler.Velocity + camera.CFrame.RightVector * (direction.X * ((vfly and vehicleflyspeed or zyflyspeed) * 50))
 			end
 			if direction.X < 0 then
-				VelocityHandler.Velocity = VelocityHandler.Velocity + camera.CFrame.RightVector * (direction.X * ((vfly and vehicleflyspeed or iyflyspeed) * 50))
+				VelocityHandler.Velocity = VelocityHandler.Velocity + camera.CFrame.RightVector * (direction.X * ((vfly and vehicleflyspeed or zyflyspeed) * 50))
 			end
 			if direction.Z > 0 then
-				VelocityHandler.Velocity = VelocityHandler.Velocity - camera.CFrame.LookVector * (direction.Z * ((vfly and vehicleflyspeed or iyflyspeed) * 50))
+				VelocityHandler.Velocity = VelocityHandler.Velocity - camera.CFrame.LookVector * (direction.Z * ((vfly and vehicleflyspeed or zyflyspeed) * 50))
 			end
 			if direction.Z < 0 then
-				VelocityHandler.Velocity = VelocityHandler.Velocity - camera.CFrame.LookVector * (direction.Z * ((vfly and vehicleflyspeed or iyflyspeed) * 50))
+				VelocityHandler.Velocity = VelocityHandler.Velocity - camera.CFrame.LookVector * (direction.Z * ((vfly and vehicleflyspeed or zyflyspeed) * 50))
 			end
 		end
 	end)
@@ -7277,14 +7277,14 @@ addcmd('fly',{},function(args, speaker)
 		mobilefly(speaker)
 	end
 	if args[1] and isNumber(args[1]) then
-		iyflyspeed = args[1]
+		zyflyspeed = args[1]
 	end
 end)
 
 addcmd('flyspeed',{'flysp'},function(args, speaker)
 	local speed = args[1] or 1
 	if isNumber(speed) then
-		iyflyspeed = speed
+		zyflyspeed = speed
 	end
 end)
 
@@ -7819,7 +7819,7 @@ end)
 
 function deleteGuisAtPos()
 	pcall(function()
-		local guisAtPosition = PlayerGui:GetGuiObjectsAtPosition(IYMouse.X, IYMouse.Y)
+		local guisAtPosition = PlayerGui:GetGuiObjectsAtPosition(ZYMouse.X, ZYMouse.Y)
 		for _, gui in pairs(guisAtPosition) do
 			if gui.Visible == true then
 				gui:Destroy()
@@ -7846,7 +7846,7 @@ addcmd('unguidelete',{'noguidelete'},function(args, speaker)
 end)
 
 local wasStayOpen = StayOpen
-addcmd('hideiy',{},function(args, speaker)
+addcmd('hidezy',{},function(args, speaker)
 	isHidden = true
 	wasStayOpen = StayOpen
 	if StayOpen == true then
@@ -7855,10 +7855,10 @@ addcmd('hideiy',{},function(args, speaker)
 	end
 	minimizeNum = 0
 	minimizeHolder()
-	if not (args[1] and tostring(args[1]) == 'nonotify') then notify('IY Hidden','You can press the prefix key to access the command bar') end
+	if not (args[1] and tostring(args[1]) == 'nonotify') then notify('ZY Hidden','You can press the prefix key to access the command bar') end
 end)
 
-addcmd('showiy',{'unhideiy'},function(args, speaker)
+addcmd('showzy',{'unhidezy'},function(args, speaker)
 	isHidden = false
 	minimizeNum = -20
 	if wasStayOpen then
@@ -10314,7 +10314,7 @@ end)
 
 addcmd("mouseteleport", {"mousetp"}, function(args, speaker)
     local root = getRoot(speaker.Character)
-    local pos = IYMouse.Hit
+    local pos = ZYMouse.Hit
     if root and pos then
         root.CFrame = CFrame.new(pos.X, pos.Y + 3, pos.Z, select(4, root.CFrame:components()))
         breakVelocity()
@@ -10328,7 +10328,7 @@ addcmd("tptool", {"teleporttool"}, function(args, speaker)
     TpTool.Parent = speaker:FindFirstChildOfClass("Backpack")
     TpTool.Activated:Connect(function()
         local root = getRoot(speaker.Character)
-        local pos = IYMouse.Hit
+        local pos = ZYMouse.Hit
         if not root or not pos then return end
         root.CFrame = CFrame.new(pos.X, pos.Y + 3, pos.Z, select(4, root.CFrame:components()))
         breakVelocity()
@@ -12305,7 +12305,7 @@ addcmd('hovername',{},function(args, speaker)
 	nbSelection.Color3 = Color3.new(1, 1, 1)
 	local function updateNameBox()
 		local t
-		local target = IYMouse.Target
+		local target = ZYMouse.Target
 
 		if target then
 			local humanoid = target.Parent:FindFirstChildOfClass("Humanoid") or target.Parent.Parent:FindFirstChildOfClass("Humanoid")
@@ -12315,11 +12315,11 @@ addcmd('hovername',{},function(args, speaker)
 		end
 
 		if t ~= nil then
-			local x = IYMouse.X
-			local y = IYMouse.Y
+			local x = ZYMouse.X
+			local y = ZYMouse.Y
 			local xP
 			local yP
-			if IYMouse.X > 200 then
+			if ZYMouse.X > 200 then
 				xP = x - 205
 				nameBox.TextXAlignment = Enum.TextXAlignment.Right
 			else
@@ -12337,7 +12337,7 @@ addcmd('hovername',{},function(args, speaker)
 			nbSelection.Adornee = nil
 		end
 	end
-	nbUpdateFunc = IYMouse.Move:Connect(updateNameBox)
+	nbUpdateFunc = ZYMouse.Move:Connect(updateNameBox)
 end)
 
 addcmd('unhovername',{'nohovername'},function(args, speaker)
@@ -13088,10 +13088,10 @@ addcmd("addallplugins", {"loadallplugins"}, function(args, speaker)
 	end
 
 	for _, filePath in ipairs(listfiles("")) do
-		local fileName = filePath:match("([^/\\]+%.iy)$")
+		local fileName = filePath:match("([^/\\]+%.zy)$")
 
 		if fileName and
-			fileName:lower() ~= "iy_fe.iy" and
+			fileName:lower() ~= "zy_fe.zy" and
 			not isfolder(fileName) and
 			not table.find(PluginsTable, fileName)
 		then
@@ -13106,7 +13106,7 @@ end)
 
 addcmd("debug", {}, function(args, speaker)
     local opt = parseBoolean(args[1], true)
-    _G.IY_DEBUG = opt
+    _G.ZY_DEBUG = opt
     notify("debug", tostring(opt), 1)
 end)
 
@@ -13120,7 +13120,7 @@ if IsOnMobile then
 	QuickCapture.Position = UDim2.new(0.489, 0, 0, 0)
 	QuickCapture.Size = UDim2.new(0, 32, 0, 33)
 	QuickCapture.Font = Enum.Font.SourceSansBold
-	QuickCapture.Text = "IY"
+	QuickCapture.Text = "ZY"
 	QuickCapture.TextColor3 = Color3.fromRGB(255, 255, 255)
 	QuickCapture.TextSize = 20
 	QuickCapture.TextWrapped = true
@@ -13287,7 +13287,7 @@ if aliases and #aliases > 0 then
 	refreshaliases()
 end
 
-IYMouse.Move:Connect(checkTT)
+ZYMouse.Move:Connect(checkTT)
 
 CaptureService.CaptureBegan:Connect(function()
 	PARENT.Enabled = false
