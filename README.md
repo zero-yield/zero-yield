@@ -55,4 +55,4 @@ A GitHub Actions workflow (`.github/workflows/lint.yml`) runs selene automatical
 
 ## Credits
 
-This project is based on the original work by EdgeIY. The original project can be found [here](https://github.com/EdgeIY/infiniteyield).
+This project is based on the original work by [EdgeIY](https://github.com/EdgeIY). The original project can be found [here](https://github.com/EdgeIY/infiniteyield).
