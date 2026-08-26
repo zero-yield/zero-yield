@@ -1,0 +1,24 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - master
+      - add-selene
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Rokit
+        uses: rojo-rbx/rokit-action@v1
+
+      - name: Run selene
+        run: selene source
