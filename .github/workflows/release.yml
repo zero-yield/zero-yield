@@ -26,10 +26,8 @@ jobs:
           client-id: ${{ vars.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - name: Setup darklua
-        uses: jacklebeignet/setup-darklua@d53788074bfd0bb4bacc3be29c22f6f25ba446fe # v1
-        with:
-          version: latest
+      - name: Install Rokit
+        uses: CompeyDev/setup-rokit@1d9390883f7ebce19d48f5b8d006e11d387c92ab # v0.2.1
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@d9bf53a078bd2f86aaffaec796dbb3d28f1b6f34 # v8.1.3
