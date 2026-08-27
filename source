@@ -8067,7 +8067,7 @@ CMDs[#CMDs + 1] = {
 	DESC = "Kills a player using tool damage (YOU NEED A TOOL)",
 }
 CMDs[#CMDs + 1] = { NAME = "fling", DESC = "Flings anyone you touch" }
-CMDs[#CMDs + 1] = { NAME = "flingme / flingmyself", DESC = "Flings yourself." }
+CMDs[#CMDs + 1] = { NAME = "flingme / flingmyself / selffling", DESC = "Flings yourself." }
 CMDs[#CMDs + 1] = { NAME = "unfling", DESC = "Disables the fling command" }
 CMDs[#CMDs + 1] = { NAME = "flyfling [speed]", DESC = "Basically the invisfling command but not invisible" }
 CMDs[#CMDs + 1] = { NAME = "unflyfling", DESC = "Disables the flyfling command" }
@@ -15938,7 +15938,7 @@ addcmd("fling", {}, function(args, speaker)
 	until flinging == false
 end)
 
-addcmd("flingme", { "flingmyself" }, function(args, speaker)
+addcmd("flingme", { "flingmyself", "selffling" }, function(args, speaker)
 	local character = speaker.Character
 	if not character then
 		return
