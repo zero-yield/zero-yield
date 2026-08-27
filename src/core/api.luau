@@ -11,8 +11,10 @@ return function(env)
 	end)
 	sethidden = missing("function", sethiddenproperty or set_hidden_property or set_hidden_prop)
 	gethidden = missing("function", gethiddenproperty or get_hidden_property or get_hidden_prop)
-	queueteleport =
-		missing("function", queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport))
+	queueteleport = missing(
+		"function",
+		queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
+	)
 	httprequest = missing(
 		"function",
 		request or http_request or (syn and syn.request) or (http and http.request) or (fluxus and fluxus.request)
@@ -53,8 +55,10 @@ return function(env)
 		return f(...)
 	end)
 	getgc = missing("function", getgc or get_gc_objects)
-	setthreadidentity =
-		missing("function", setthreadidentity or (syn and syn.set_thread_identity) or syn_context_set or setthreadcontext)
+	setthreadidentity = missing(
+		"function",
+		setthreadidentity or (syn and syn.set_thread_identity) or syn_context_set or setthreadcontext
+	)
 	replicatesignal = missing("function", replicatesignal)
 	getconnections = missing("function", getconnections or get_signal_cons)
 
