@@ -9,5 +9,13 @@ if (!version) {
 const file = 'version';
 const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 data.Version = version;
+// Change the version in the version file
 fs.writeFileSync(file, JSON.stringify(data, null, '\t') + '\n');
+
+// Change the version in the source code
+const sourceFile = 'source';
+let sourceData = fs.readFileSync(sourceFile, 'utf8');
+sourceData = sourceData.replace(/currentVersion = "[^"]*"/, `currentVersion = "${version}"`);
+fs.writeFileSync(sourceFile, sourceData);
+
 console.log(`Version updated to ${version}`);
