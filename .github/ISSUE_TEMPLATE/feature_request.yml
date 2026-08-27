@@ -1,0 +1,44 @@
+name: Feature Request
+description: Suggest an idea or improvement for Zero Yield.
+title: "[Feature]: "
+labels:
+  - enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement to Zero Yield!
+
+        Please search existing issues first to make sure your idea has not already been suggested.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem would this feature solve?
+      placeholder: I would like this feature because...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature or improvement you would like to see.
+      placeholder: I think Zero Yield should...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Describe any alternative solutions or workarounds you have considered.
+      placeholder: Another possible approach would be...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information
+      description: Add any other information, examples, or screenshots that may be useful.
