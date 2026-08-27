@@ -8067,6 +8067,7 @@ CMDs[#CMDs + 1] = {
 	DESC = "Kills a player using tool damage (YOU NEED A TOOL)",
 }
 CMDs[#CMDs + 1] = { NAME = "fling", DESC = "Flings anyone you touch" }
+CMDs[#CMDs + 1] = { NAME = "flingme / flingmyself", DESC = "Flings yourself." }
 CMDs[#CMDs + 1] = { NAME = "unfling", DESC = "Disables the fling command" }
 CMDs[#CMDs + 1] = { NAME = "flyfling [speed]", DESC = "Basically the invisfling command but not invisible" }
 CMDs[#CMDs + 1] = { NAME = "unflyfling", DESC = "Disables the flyfling command" }
@@ -15935,6 +15936,63 @@ addcmd("fling", {}, function(args, speaker)
 		bambam.AngularVelocity = Vector3.new(0, 0, 0)
 		task.wait(0.1)
 	until flinging == false
+end)
+
+addcmd("flingme", { "flingmyself" }, function(args, speaker)
+	local character = speaker.Character
+	if not character then
+		return
+	end
+
+	local root = character:FindFirstChild("HumanoidRootPart")
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+	if not root or not humanoid then
+		return
+	end
+
+	local power = tonumber(args and args[1]) or 50
+
+	if power ~= power or power == math.huge or power == -math.huge then
+		return notify("Error", "Power must be a valid number")
+	end
+
+	if power <= 0 then
+		return notify("Error", "Power must be greater than 0")
+	end
+
+	local angle = math.random() * math.pi * 2
+	local upwardForce = math.random(40, 100) / 100
+
+	local launchDirection = Vector3.new(math.cos(angle), upwardForce, math.sin(angle)).Unit
+
+	local launchVelocity = power * 12
+	local spinPower = power * 10
+
+	local function randomSpin()
+		return Vector3.new(
+			math.random(-spinPower, spinPower),
+			math.random(-spinPower, spinPower),
+			math.random(-spinPower, spinPower)
+		)
+	end
+
+	humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
+
+	root.AssemblyLinearVelocity += launchDirection * launchVelocity
+	root.AssemblyAngularVelocity = randomSpin()
+
+	task.spawn(function()
+		for _ = 1, 4 do
+			RunService.Heartbeat:Wait()
+
+			if not root.Parent then
+				return
+			end
+
+			root.AssemblyAngularVelocity = randomSpin()
+		end
+	end)
 end)
 
 addcmd("unfling", { "nofling" }, function(args, speaker)
