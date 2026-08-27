@@ -3,7 +3,7 @@ name: Devbuild
 on:
   push:
     branches:
-      - master
+      - next
 
 jobs:
   build:
