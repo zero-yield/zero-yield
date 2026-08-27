@@ -64,6 +64,8 @@ jobs:
             /tmp/devbuild/source.min.luau
 
       - name: Commit build to builds branch
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           # Fetch builds branch if it exists
           git fetch origin builds:builds || true
