@@ -1,5 +1,3 @@
-// This file is used for Semantic Release to bump automatically Zero Yield's version.
-
 import fs from "fs";
 const version = process.argv[2];
 
