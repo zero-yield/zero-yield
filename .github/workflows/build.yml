@@ -52,13 +52,13 @@ jobs:
         run: |
           mkdir -p /tmp/devbuild
 
-          # Copy the original source
-          cp source /tmp/devbuild/source.luau
+          # Bundle modules into single file (unminified)
+          darklua process src/init.luau /tmp/devbuild/source.luau
 
       - name: Minify source with DarkLua
         run: |
           darklua process \
-            /tmp/devbuild/source.luau \
+            src/init.luau \
             /tmp/devbuild/source.min.luau
 
       - name: Commit build to builds branch
