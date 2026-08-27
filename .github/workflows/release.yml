@@ -27,7 +27,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Setup darklua
-        uses: jacklebeignet/setup-darklua@ab6bcdae45d364076e6ad3a1af51351c84fc0cec # v1
+        uses: jacklebeignet/setup-darklua@44279c85de96ac5863eb5945861e37228b11dfd4 # v1
         with:
           version: latest
 
