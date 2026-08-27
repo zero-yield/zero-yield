@@ -45,10 +45,8 @@ jobs:
         run: |
           echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Setup darklua
-        uses: jacklebeignet/setup-darklua@44279c85de96ac5863eb5945861e37228b11dfd4 # v1
-        with:
-          version: latest
+      - name: Install Rokit
+        uses: CompeyDev/setup-rokit@1d9390883f7ebce19d48f5b8d006e11d387c92ab # v0.2.1
 
       - name: Prepare source
         run: |
