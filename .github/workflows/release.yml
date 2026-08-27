@@ -26,6 +26,11 @@ jobs:
           client-id: ${{ vars.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
+      - name: Setup darklua
+        uses: jacklebeignet/setup-darklua@ab6bcdae45d364076e6ad3a1af51351c84fc0cec # v1
+        with:
+          version: latest
+
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v6
         with:
