@@ -59,7 +59,6 @@ jobs:
         run: |
           darklua process \
             -c .darklua.min.json5 \
-            --format dense \
             src/init.luau \
             /tmp/devbuild/source.min.luau
 

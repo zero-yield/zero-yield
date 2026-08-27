@@ -17,7 +17,6 @@ await execFileAsync("darklua", [
 await execFileAsync("darklua", [
   "process",
   "-c", ".darklua.min.json5",
-  "--format", "dense",
   "src/init.luau",
   "dist/source.min.luau",
 ]);
