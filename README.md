@@ -5,8 +5,18 @@ A fork of Infinite Yield designed to provide a better experience.
 > [!CAUTION]
 > This fork is still in development. Expect bugs!
 
+## Loadstrings
+
+### Stable
+
 ```luau
-loadstring(game:HttpGet("https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/builds/source.min.luau"))()
+loadstring(game:HttpGet("https://github.com/zero-yield/zero-yield/releases/latest/download/source.min.luau"))()
+```
+
+### Beta
+
+```luau
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zero-yield/zero-yield/refs/heads/builds/source.min.luau"))()
 ```
 
 ## Note on custom plugins
