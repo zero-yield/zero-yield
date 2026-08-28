@@ -1,9 +1,10 @@
 # Zero Yield
 
-A fork of Infinite Yield designed to provide a better experience.
+A fork of [Infinite Yield](https://github.com/EdgeIY/infiniteyield) designed to provide a better experience.
+It's faster, cleaner, and easier to maintain.
 
 > [!CAUTION]
-> This fork is still in development. Expect bugs!
+> This fork is still in development, expect bugs.
 
 ## Loadstrings
 
@@ -21,34 +22,50 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/zero-yield/zero-yield
 
 ## Note on custom plugins
 
-Plugins for Zero Yield are `.zy` files to avoid confusion with Infinite Yield plugins. If you are using an `.iy` file and want to port it to Zero Yield, simply rename the file extension to: `.zy`.
+Plugins for Zero Yield use the `.zy` extension to avoid confusion with Infinite Yield plugins. To port an existing `.iy` plugin, simply rename the file to `.zy`.
 
 ## Development
 
 ### Prerequisites
 
-Install [Rokit](https://github.com/rojo-rbx/rokit) to manage project tools (selene, StyLua).
+Install [Rokit](https://github.com/rojo-rbx/rokit) to manage project tools (selene, StyLua, darklua):
 
 ```bash
 rokit install
 ```
 
+### Build
+
+Bundle the modules into single-file release builds via [DarkLua](https://github.com/seaofvoices/darklua):
+
+```bash
+node scripts/release.js
+```
+
+This produces `dist/source.luau` (readable) and `dist/source.min.luau` (minified).
+
+Bump the version and keep it in sync across files in one step:
+
+```bash
+node scripts/update-version.js 6.6.1
+```
+
 ### Git hooks
 
-This project uses [pre-commit](https://pre-commit.com) to lint and format code automatically on each commit.
+This project uses [pre-commit](https://pre-commit.com) to format and lint code automatically on every commit.
 
 ```bash
 pip install pre-commit
 pre-commit install
 ```
 
-After setup, `stylua` and `selene` will run on staged `.luau` files before every commit.
+After setup, `stylua` and `selene` run against the staged `.luau` files before each commit. The StyLua hook uses the system binary (via Rokit) so it gains full Luau support.
 
 ### Manual checks
 
 ```bash
-stylua --check source
-selene source
+stylua src/ --check
+selene src/
 ```
 
 ## Linting
@@ -58,10 +75,10 @@ This project uses [selene](https://kampfkarren.github.io/selene/) for Lua lintin
 To run the linter locally:
 
 ```bash
-selene source
+selene src/
 ```
 
-A GitHub Actions workflow (`.github/workflows/lint.yml`) runs selene automatically on pushes and pull requests.
+A GitHub Actions workflow (`.github/workflows/lint.yml`) runs selene and StyLua automatically on pushes and pull requests to `master` and `next`.
 
 ## Credits
 
