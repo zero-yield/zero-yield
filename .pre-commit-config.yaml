@@ -10,11 +10,12 @@ repos:
     rev: v2.5.2
     hooks:
       - id: stylua
+        args: [src/]
 
   - repo: local
     hooks:
       - id: selene
         name: selene
-        entry: selene
+        entry: selene src/
         language: system
         types: [lua]

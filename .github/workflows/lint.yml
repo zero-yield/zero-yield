@@ -22,4 +22,7 @@ jobs:
         uses: CompeyDev/setup-rokit@1d9390883f7ebce19d48f5b8d006e11d387c92ab # v0.2.1
 
       - name: Run selene
-        run: selene source
+        run: selene src/
+
+      - name: Run StyLua
+        run: stylua src/ --check
