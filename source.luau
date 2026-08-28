@@ -3114,6 +3114,16 @@ do
                 end
 
                 prefix = prefix or ';'
+                StayOpen = StayOpen or false
+                guiScale = guiScale or 1
+                KeepInfYield = KeepInfYield == nil and true or KeepInfYield
+                espTransparency = espTransparency or 0.3
+                logsEnabled = logsEnabled or false
+                jLogsEnabled = jLogsEnabled or false
+                aliases = aliases or {}
+                binds = binds or {}
+                WayPoints = WayPoints or {}
+                PluginsTable = PluginsTable or {}
 
                 function updatesaves()
                     if writefileExploit() then
