@@ -466,7 +466,7 @@ return function(env)
 	end)
 
 	Players.LocalPlayer.Chatted:Connect(function()
-		wait()
+		task.wait()
 		if lastEnteredString then
 			local message = lastEnteredString
 			lastEnteredString = nil
@@ -491,12 +491,12 @@ return function(env)
 		if tabComplete then
 			tabComplete:Disconnect()
 		end
-		wait()
+		task.wait()
 		if not Cmdbar:IsFocused() then
 			Cmdbar.Text = ""
 			IndexContents("", true, false, true)
 			if SettingsOpen then
-				wait(0.2)
+				task.wait(0.2)
 				Settings:TweenPosition(UDim2.new(0, 0, 0, 45), "InOut", "Quart", 0.2, true, nil)
 				CMDsF.Visible = false
 			end
@@ -508,7 +508,7 @@ return function(env)
 		historyCount = 0
 		canvasPos = CMDsF.CanvasPosition
 		if SettingsOpen then
-			wait(0.2)
+			task.wait(0.2)
 			CMDsF.Visible = true
 			Settings:TweenPosition(UDim2.new(0, 0, 0, 220), "InOut", "Quart", 0.2, true, nil)
 		end

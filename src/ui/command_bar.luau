@@ -32,7 +32,7 @@ return function(env)
 			CamMoved:Disconnect()
 			CameraChanged:Disconnect()
 			repeat
-				wait()
+				task.wait()
 			until workspace.CurrentCamera
 			CameraChanged = workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(UpdateToViewport)
 			CamMoved = workspace.CurrentCamera.AncestryChanged:Connect(updateCamera)
@@ -221,7 +221,7 @@ return function(env)
 			local function Index()
 				if chatbox.Text:lower():sub(1, 1) == prefix then
 					if SettingsOpen then
-						wait(0.2)
+						task.wait(0.2)
 						CMDsF.Visible = true
 						Settings:TweenPosition(UDim2.new(0, 0, 0, 220), "InOut", "Quart", 0.2, true, nil)
 					end
@@ -232,7 +232,7 @@ return function(env)
 				else
 					minimizeHolder()
 					if SettingsOpen then
-						wait(0.2)
+						task.wait(0.2)
 						Settings:TweenPosition(UDim2.new(0, 0, 0, 45), "InOut", "Quart", 0.2, true, nil)
 						CMDsF.Visible = false
 					end
@@ -250,7 +250,7 @@ return function(env)
 			local chatboxFocusLostC = chatbox.FocusLost:Connect(chatboxFocusLost)
 
 			PlayerGui:WaitForChild("Chat").Frame.ChatBarParentFrame.ChildAdded:Connect(function(newbar)
-				wait()
+				task.wait()
 				if newbar:FindFirstChild("BoxFrame") then
 					chatbox = PlayerGui:WaitForChild("Chat").Frame.ChatBarParentFrame.Frame.BoxFrame.Frame.ChatBar
 					if chatboxFocusedC then
@@ -897,7 +897,7 @@ return function(env)
 	CMDs[#CMDs + 1] = { NAME = "reloadplugin [name]", DESC = "Reloads a plugin" }
 	CMDs[#CMDs + 1] =
 		{ NAME = "addallplugins / loadallplugins", DESC = "Adds all available plugins from the workspace folder" }
-	-- wait()
+	-- task.wait()
 
 	for i = 1, #CMDs do
 		local newcmd = Example:Clone()
@@ -1032,14 +1032,14 @@ return function(env)
 
 						lastCmds[cmdName] = v
 					end
-					local cmdStartTime = tick()
+					local cmdStartTime = os.clock()
 					if infTimes then
 						while lastBreakTime < cmdStartTime do
 							local success, err = pcall(cmd.FUNC, args, speaker)
 							if not success and _G.ZY_DEBUG then
 								warn("Command Error:", cmdName, err)
 							end
-							wait(cmdDelay)
+							task.wait(cmdDelay)
 						end
 					else
 						for rep = 1, num do
@@ -1053,7 +1053,7 @@ return function(env)
 								warn("Command Error:", cmdName, err)
 							end
 							if cmdDelay ~= 0 then
-								wait(cmdDelay)
+								task.wait(cmdDelay)
 							end
 						end
 					end

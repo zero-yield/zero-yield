@@ -159,13 +159,13 @@ Players.PlayerAdded:Connect(function(plr)
 	end
 	if ESPenabled then
 		repeat
-			wait(1)
+			task.wait(1)
 		until plr.Character and getRoot(plr.Character)
 		ESP(plr)
 	end
 	if CHMSenabled then
 		repeat
-			wait(1)
+			task.wait(1)
 		until plr.Character and getRoot(plr.Character)
 		CHMS(plr)
 	end
