@@ -962,6 +962,8 @@ return function(env)
 		end
 	end
 
+	prefix = prefix or ";"
+
 	function updatesaves()
 		if writefileExploit() then
 			local data = {
