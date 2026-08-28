@@ -10,12 +10,13 @@ repos:
     rev: v2.5.2
     hooks:
       - id: stylua
-        args: [src/]
+        args: [--stdin-filepath, $FILENAME]
+        files: \.luau?$
 
   - repo: local
     hooks:
       - id: selene
         name: selene
-        entry: selene src/
+        entry: selene
         language: system
-        types: [lua]
+        files: \.luau?$
