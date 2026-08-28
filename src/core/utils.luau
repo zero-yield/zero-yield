@@ -417,7 +417,9 @@ return function(env)
 			end
 			notify("Spectate", "View turned off (player left)")
 		end
-		if eventEditor then eventEditor.FireEvent("OnLeave", player.Name) end
+		if eventEditor then
+			eventEditor.FireEvent("OnLeave", player.Name)
+		end
 	end)
 
 	Exit.MouseButton1Down:Connect(function()
@@ -433,7 +435,9 @@ return function(env)
 	end)
 
 	EventBind.MouseButton1Click:Connect(function()
-		if eventEditor then eventEditor.Frame:TweenPosition(UDim2.new(0.5, -175, 0.5, -101), "InOut", "Quart", 0.5, true, nil) end
+		if eventEditor then
+			eventEditor.Frame:TweenPosition(UDim2.new(0.5, -175, 0.5, -101), "InOut", "Quart", 0.5, true, nil)
+		end
 	end)
 
 	Keybinds.MouseButton1Click:Connect(function()
