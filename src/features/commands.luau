@@ -1208,7 +1208,7 @@ end
 	)
 
 	addcmd("waypoints", { "positions" }, function(args, speaker)
-		if SettingsOpen == false then
+		if not SettingsOpen then
 			SettingsOpen = true
 			Settings:TweenPosition(UDim2.new(0, 0, 0, 45), "InOut", "Quart", 0.5, true, nil)
 			CMDsF.Visible = false

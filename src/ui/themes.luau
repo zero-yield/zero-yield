@@ -667,7 +667,7 @@ return function(env)
 	end)
 
 	SettingsButton.MouseButton1Click:Connect(function()
-		if SettingsOpen == false then
+		if not SettingsOpen then
 			SettingsOpen = true
 			Settings:TweenPosition(UDim2.new(0, 0, 0, 45), "InOut", "Quart", 0.5, true, nil)
 			CMDsF.Visible = false

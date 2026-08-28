@@ -495,7 +495,7 @@ return function(env)
 		if not Cmdbar:IsFocused() then
 			Cmdbar.Text = ""
 			IndexContents("", true, false, true)
-			if SettingsOpen == true then
+			if SettingsOpen then
 				wait(0.2)
 				Settings:TweenPosition(UDim2.new(0, 0, 0, 45), "InOut", "Quart", 0.2, true, nil)
 				CMDsF.Visible = false
@@ -507,7 +507,7 @@ return function(env)
 	Cmdbar.Focused:Connect(function()
 		historyCount = 0
 		canvasPos = CMDsF.CanvasPosition
-		if SettingsOpen == true then
+		if SettingsOpen then
 			wait(0.2)
 			CMDsF.Visible = true
 			Settings:TweenPosition(UDim2.new(0, 0, 0, 220), "InOut", "Quart", 0.2, true, nil)
