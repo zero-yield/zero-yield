@@ -1048,20 +1048,20 @@ return function(env)
 				task.spawn(function()
 					pinNotification:Disconnect()
 					notificationPinned = true
-					Title_2.BackgroundTransparency = 1
+					Notification.Title.BackgroundTransparency = 1
 					wait(0.5)
-					Title_2.BackgroundTransparency = 0
+					Notification.Title.BackgroundTransparency = 0
 				end)
 			end)
 			Notification:TweenPosition(UDim2.new(1, Notification.Position.X.Offset, 1, 0), "InOut", "Quart", 0.5, true, nil)
 			wait(0.6)
 			local closepressed = false
 			if text2 then
-				Title_2.Text = text
-				Text_2.Text = text2
+				Notification.Title.Text = text
+				Notification.Text.Text = text2
 			else
-				Title_2.Text = "Notification"
-				Text_2.Text = text
+				Notification.Title.Text = "Notification"
+				Notification.Text.Text = text
 			end
 			Notification:TweenPosition(
 				UDim2.new(1, Notification.Position.X.Offset, 1, -100),
