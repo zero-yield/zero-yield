@@ -1016,27 +1016,23 @@ return function(env)
 	end
 
 	function maximizeHolder()
-		Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, -220), "InOut", "Quart", 0.2, true, nil)
-		Notification:TweenPosition(
-			UDim2.new(1, -250, Notification.Position.Y.Scale, Notification.Position.Y.Offset),
-			"InOut",
-			"Quart",
-			0.2,
-			true,
-			nil
-		)
+		if StayOpen == false then
+			Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, -220), "InOut", "Quart", 0.2, true, nil)
+		end
 	end
 
+	minimizeNum = -20
 	function minimizeHolder()
-		Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, -20), "InOut", "Quart", 0.2, true, nil)
-		Notification:TweenPosition(UDim2.new(1, -250, 1, 20), "InOut", "Quart", 0.2, true, nil)
+		if StayOpen == false then
+			Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, minimizeNum), "InOut", "Quart", 0.5, true, nil)
+		end
 	end
 
 	function cmdbarHolder()
-		Holder:TweenPosition(UDim2.new(1, -250, 1, -260), "InOut", "Quart", 0.2, true, nil)
+		if StayOpen == false then
+			Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, -45), "InOut", "Quart", 0.5, true, nil)
+		end
 	end
-
-	lastMinimizeReq = 0
 
 	pinNotification = nil
 	local notifyCount = 0
@@ -1048,48 +1044,64 @@ return function(env)
 			if pinNotification then
 				pinNotification:Disconnect()
 			end
-			Notification.Title.Text = text
-			Notification.Text.Text = text2
-			Notification.Position = UDim2.new(1, -250, 1, 20)
-			Notification.Visible = true
-			Notification.BackgroundTransparency = 0
-			Notification.Title.BackgroundTransparency = 0
-			Notification.Text.TextTransparency = 0
-			Notification.Text.Visible = true
-			local closing = false
-			local CloseFunc = function()
-				if closing then
-					return
-				end
-				closing = true
-				Notification:TweenPosition(UDim2.new(1, -250, 1, 20), "InOut", "Quart", 0.5, true, nil)
-				task.wait(0.5)
-				Notification.Visible = false
-				Notification.BackgroundTransparency = 1
-				Notification.Title.BackgroundTransparency = 1
-				Notification.Text.TextTransparency = 1
-			end
-			if length ~= nil then
-				task.delay(length, CloseFunc)
-			else
-				task.delay(5, CloseFunc)
-			end
-			CloseButton.MouseButton1Click:Connect(CloseFunc)
-			PinButton.MouseButton1Click:Connect(function()
-				if not notificationPinned then
+			pinNotification = PinButton.MouseButton1Click:Connect(function()
+				task.spawn(function()
+					pinNotification:Disconnect()
 					notificationPinned = true
-					pinNotification = Notification.InputBegan:Connect(function(input)
-						if
-							input.UserInputType == Enum.UserInputType.MouseButton1
-							or input.UserInputType == Enum.UserInputType.Touch
-						then
-							notificationPinned = false
-							pinNotification:Disconnect()
-							CloseFunc()
-						end
-					end)
-				end
+					Title_2.BackgroundTransparency = 1
+					wait(0.5)
+					Title_2.BackgroundTransparency = 0
+				end)
 			end)
+			Notification:TweenPosition(UDim2.new(1, Notification.Position.X.Offset, 1, 0), "InOut", "Quart", 0.5, true, nil)
+			wait(0.6)
+			local closepressed = false
+			if text2 then
+				Title_2.Text = text
+				Text_2.Text = text2
+			else
+				Title_2.Text = "Notification"
+				Text_2.Text = text
+			end
+			Notification:TweenPosition(
+				UDim2.new(1, Notification.Position.X.Offset, 1, -100),
+				"InOut",
+				"Quart",
+				0.5,
+				true,
+				nil
+			)
+			CloseButton.MouseButton1Click:Connect(function()
+				Notification:TweenPosition(
+					UDim2.new(1, Notification.Position.X.Offset, 1, 0),
+					"InOut",
+					"Quart",
+					0.5,
+					true,
+					nil
+				)
+				closepressed = true
+				pinNotification:Disconnect()
+			end)
+			if length and isNumber(length) then
+				wait(length)
+			else
+				wait(10)
+			end
+			if LnotifyCount == notifyCount then
+				if closepressed == false and notificationPinned == false then
+					pinNotification:Disconnect()
+					Notification:TweenPosition(
+						UDim2.new(1, Notification.Position.X.Offset, 1, 0),
+						"InOut",
+						"Quart",
+						0.5,
+						true,
+						nil
+					)
+				end
+				notifyCount = 0
+			end
 		end)
 	end
 
@@ -1170,19 +1182,23 @@ return function(env)
 		scroll_3.CanvasSize = UDim2.new(0, 0, 0, listlayout.AbsoluteContentSize.Y)
 	end
 
+	local lastMinimizeReq = 0
 	Holder.MouseEnter:Connect(function()
 		lastMinimizeReq = 0
 		maximizeHolder()
 	end)
 
 	Holder.MouseLeave:Connect(function()
-		if StayOpen == false and Cmdbar.Text == "" then
-			lastMinimizeReq = tick()
-			task.delay(2, function()
-				if Cmdbar.Text == "" and StayOpen == false and lastMinimizeReq ~= 0 then
-					minimizeHolder()
-				end
-			end)
+		if not Cmdbar:IsFocused() then
+			local reqTime = tick()
+			lastMinimizeReq = reqTime
+			wait(1)
+			if lastMinimizeReq ~= reqTime then
+				return
+			end
+			if not Cmdbar:IsFocused() then
+				minimizeHolder()
+			end
 		end
 	end)
 
