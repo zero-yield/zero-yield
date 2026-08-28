@@ -1520,7 +1520,7 @@ end
 	addcmd("hidezy", {}, function(args, speaker)
 		isHidden = true
 		wasStayOpen = StayOpen
-		if StayOpen == true then
+		if StayOpen then
 			StayOpen = false
 			On.BackgroundTransparency = 1
 		end
