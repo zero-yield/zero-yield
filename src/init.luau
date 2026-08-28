@@ -12,6 +12,7 @@ end
 local env = {}
 
 require("./core/api")(env)
+require("./core/version")(env)
 require("./core/services")(env)
 require("./ui/ui")(env)
 require("./core/utils")(env)

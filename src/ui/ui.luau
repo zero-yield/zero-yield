@@ -1,6 +1,4 @@
 return function(env)
-	currentVersion = "6.6.1"
-
 	ScaledHolder = Instance.new("Frame")
 	Scale = Instance.new("UIScale")
 	Holder = Instance.new("Frame")
