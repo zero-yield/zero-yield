@@ -1024,7 +1024,14 @@ return function(env)
 	minimizeNum = -20
 	function minimizeHolder()
 		if StayOpen == false then
-			Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, minimizeNum), "InOut", "Quart", 0.5, true, nil)
+			Holder:TweenPosition(
+				UDim2.new(1, Holder.Position.X.Offset, 1, minimizeNum),
+				"InOut",
+				"Quart",
+				0.5,
+				true,
+				nil
+			)
 		end
 	end
 
@@ -1053,7 +1060,14 @@ return function(env)
 					Notification.Title.BackgroundTransparency = 0
 				end)
 			end)
-			Notification:TweenPosition(UDim2.new(1, Notification.Position.X.Offset, 1, 0), "InOut", "Quart", 0.5, true, nil)
+			Notification:TweenPosition(
+				UDim2.new(1, Notification.Position.X.Offset, 1, 0),
+				"InOut",
+				"Quart",
+				0.5,
+				true,
+				nil
+			)
 			wait(0.6)
 			local closepressed = false
 			if text2 then
