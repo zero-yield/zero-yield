@@ -13,7 +13,7 @@ data.Version = version;
 fs.writeFileSync(file, JSON.stringify(data, null, "\t") + "\n");
 
 // Change the version in the source code
-const sourceFile = "src/core/services.luau";
+const sourceFile = "source";
 let sourceData = fs.readFileSync(sourceFile, "utf8");
 sourceData = sourceData.replace(
   /currentVersion = "[^"]*"/,

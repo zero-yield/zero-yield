@@ -52,14 +52,13 @@ jobs:
         run: |
           mkdir -p /tmp/devbuild
 
-          # Bundle modules into single file (readable, unminified)
-          darklua process src/init.luau /tmp/devbuild/source.luau
+          # Copy the original source
+          cp source /tmp/devbuild/source.luau
 
       - name: Minify source with DarkLua
         run: |
           darklua process \
-            -c .darklua.min.json5 \
-            src/init.luau \
+            /tmp/devbuild/source.luau \
             /tmp/devbuild/source.min.luau
 
       - name: Commit build to builds branch
