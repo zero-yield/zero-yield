@@ -3192,7 +3192,7 @@ do
                     return HOUR .. ':' .. MINUTE .. ':' .. SECOND .. ' ' .. AP
                 end
                 function maximizeHolder()
-                    if StayOpen == false then
+                    if not StayOpen then
                         Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, 
 -220), 'InOut', 'Quart', 0.2, true, nil)
                     end
@@ -3201,12 +3201,12 @@ do
                 minimizeNum = -20
 
                 function minimizeHolder()
-                    if StayOpen == false then
+                    if not StayOpen then
                         Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, minimizeNum), 'InOut', 'Quart', 0.5, true, nil)
                     end
                 end
                 function cmdbarHolder()
-                    if StayOpen == false then
+                    if not StayOpen then
                         Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, 
 -45), 'InOut', 'Quart', 0.5, true, nil)
                     end
@@ -13731,7 +13731,7 @@ end
                     isHidden = true
                     wasStayOpen = StayOpen
 
-                    if StayOpen == true then
+                    if StayOpen then
                         StayOpen = false
                         On.BackgroundTransparency = 1
                     end
