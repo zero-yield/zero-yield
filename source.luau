@@ -7844,7 +7844,7 @@ do
                     end
                 end)
                 SettingsButton.MouseButton1Click:Connect(function()
-                    if SettingsOpen == false then
+                    if not SettingsOpen then
                         SettingsOpen = true
 
                         Settings:TweenPosition(UDim2.new(0, 0, 0, 45), 'InOut', 'Quart', 0.5, true, nil)
@@ -8545,7 +8545,7 @@ do
 
                         IndexContents('', true, false, true)
 
-                        if SettingsOpen == true then
+                        if SettingsOpen then
                             wait(0.2)
                             Settings:TweenPosition(UDim2.new(0, 0, 0, 45), 'InOut', 'Quart', 0.2, true, nil)
 
@@ -8559,7 +8559,7 @@ do
                     historyCount = 0
                     canvasPos = CMDsF.CanvasPosition
 
-                    if SettingsOpen == true then
+                    if SettingsOpen then
                         wait(0.2)
 
                         CMDsF.Visible = true
@@ -9798,7 +9798,7 @@ do
 
                         local function Index()
                             if chatbox.Text:lower():sub(1, 1) == prefix then
-                                if SettingsOpen == true then
+                                if SettingsOpen then
                                     wait(0.2)
 
                                     CMDsF.Visible = true
@@ -9810,7 +9810,7 @@ do
                             else
                                 minimizeHolder()
 
-                                if SettingsOpen == true then
+                                if SettingsOpen then
                                     wait(0.2)
                                     Settings:TweenPosition(UDim2.new(0, 0, 0, 45), 'InOut', 'Quart', 0.2, true, nil)
 
@@ -13358,7 +13358,7 @@ end
                 addcmd('waypoints', {
                     'positions',
                 }, function(args, speaker)
-                    if SettingsOpen == false then
+                    if not SettingsOpen then
                         SettingsOpen = true
 
                         Settings:TweenPosition(UDim2.new(0, 0, 0, 45), 'InOut', 'Quart', 0.5, true, nil)
