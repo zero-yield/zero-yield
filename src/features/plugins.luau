@@ -263,13 +263,15 @@ return function(env)
 
 		if plugin ~= nil then
 			if not startup then
+				local pName = plugin["PluginName"] or "Unknown"
+				local pDesc = plugin["PluginDescription"] or "No description"
 				notify(
 					"Loaded Plugin",
-					"Name: " .. plugin["PluginName"] .. "\n" .. "Description: " .. plugin["PluginDescription"]
+					"Name: " .. pName .. "\n" .. "Description: " .. pDesc
 				)
 			end
 			addcmdtext("", val)
-			addcmdtext(string.upper("--" .. plugin["PluginName"]), val, plugin["PluginDescription"])
+			addcmdtext(string.upper("--" .. (plugin["PluginName"] or "UNKNOWN")), val, plugin["PluginDescription"])
 			if plugin["Commands"] then
 				for i, v in pairs(plugin["Commands"]) do
 					local cmdExt = ""
