@@ -3192,17 +3192,20 @@ do
                     return HOUR .. ':' .. MINUTE .. ':' .. SECOND .. ' ' .. AP
                 end
                 function maximizeHolder()
-                    Holder:TweenPosition(UDim2.new(1, -250, 1, -220), 'InOut', 'Quart', 0.2, true, nil)
+                    Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, 
+-220), 'InOut', 'Quart', 0.2, true, nil)
                     Notification:TweenPosition(UDim2.new(1, -250, Notification.Position.Y.Scale, Notification.Position.Y.Offset), 'InOut', 'Quart', 0.2, true, nil)
                 end
                 function minimizeHolder()
-                    Holder:TweenPosition(UDim2.new(1, -250, 1, -5), 'InOut', 'Quart', 0.2, true, nil)
+                    Holder:TweenPosition(UDim2.new(1, Holder.Position.X.Offset, 1, 
+-20), 'InOut', 'Quart', 0.2, true, nil)
                     Notification:TweenPosition(UDim2.new(1, -250, 1, 20), 'InOut', 'Quart', 0.2, true, nil)
                 end
                 function cmdbarHolder()
                     Holder:TweenPosition(UDim2.new(1, -250, 1, -260), 'InOut', 'Quart', 0.2, true, nil)
                 end
 
+                lastMinimizeReq = 0
                 pinNotification = nil
 
                 local notifyCount = 0
@@ -3352,10 +3355,17 @@ do
                     scroll_3.CanvasSize = UDim2.new(0, 0, 0, listlayout.AbsoluteContentSize.Y)
                 end
 
+                Holder.MouseEnter:Connect(function()
+                    lastMinimizeReq = 0
+
+                    maximizeHolder()
+                end)
                 Holder.MouseLeave:Connect(function()
                     if StayOpen == false and Cmdbar.Text == '' then
+                        lastMinimizeReq = tick()
+
                         task.delay(2, function()
-                            if Cmdbar.Text == '' and StayOpen == false then
+                            if Cmdbar.Text == '' and StayOpen == false and lastMinimizeReq ~= 0 then
                                 minimizeHolder()
                             end
                         end)
