@@ -265,10 +265,7 @@ return function(env)
 			if not startup then
 				local pName = plugin["PluginName"] or "Unknown"
 				local pDesc = plugin["PluginDescription"] or "No description"
-				notify(
-					"Loaded Plugin",
-					"Name: " .. pName .. "\n" .. "Description: " .. pDesc
-				)
+				notify("Loaded Plugin", "Name: " .. pName .. "\n" .. "Description: " .. pDesc)
 			end
 			addcmdtext("", val)
 			addcmdtext(string.upper("--" .. (plugin["PluginName"] or "UNKNOWN")), val, plugin["PluginDescription"])
