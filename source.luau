@@ -3122,6 +3122,7 @@ do
                 jLogsEnabled = jLogsEnabled or false
                 aliases = aliases or {}
                 binds = binds or {}
+                pWayPoints = pWayPoints or {}
                 WayPoints = WayPoints or {}
                 PluginsTable = PluginsTable or {}
 
