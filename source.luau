@@ -4311,7 +4311,7 @@ do
                             49,
                             'Frame',
                             {
-                                currentShade1,
+                                BackgroundColor3 = currentShade1,
                                 BorderSizePixel = 0,
                                 ClipsDescendants = true,
                                 Name = 'CmdTemplate',
