@@ -91,6 +91,28 @@ do
     do
         local function __modImpl()
             return function(env)
+                currentVersion = '6.6.1'
+
+                return env
+            end
+        end
+
+        function __DARKLUA_BUNDLE_MODULES.b(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.b
+
+            if not v then
+                v = {
+                    c = __modImpl(),
+                }
+                __DARKLUA_BUNDLE_MODULES.cache.b = v
+            end
+
+            return v.c
+        end
+    end
+    do
+        local function __modImpl()
+            return function(env)
                 Services = setmetatable({}, {
                     __index = function(self, name)
                         local success, cache = pcall(function()
@@ -206,20 +228,18 @@ do
                     end)
                 end
 
-                currentVersion = '6.6.1'
-
                 return env
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.b(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.b
+        function __DARKLUA_BUNDLE_MODULES.c(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.c
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.b = v
+                __DARKLUA_BUNDLE_MODULES.cache.c = v
             end
 
             return v.c
@@ -228,7 +248,6 @@ do
     do
         local function __modImpl()
             return function(env)
-                currentVersion = '6.6.1'
                 ScaledHolder = Instance.new('Frame')
                 Scale = Instance.new('UIScale')
                 Holder = Instance.new('Frame')
@@ -2111,14 +2130,14 @@ do
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.c(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.c
+        function __DARKLUA_BUNDLE_MODULES.d(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.d
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.c = v
+                __DARKLUA_BUNDLE_MODULES.cache.d = v
             end
 
             return v.c
@@ -3393,14 +3412,14 @@ do
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.d(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.d
+        function __DARKLUA_BUNDLE_MODULES.e(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.e
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.d = v
+                __DARKLUA_BUNDLE_MODULES.cache.e = v
             end
 
             return v.c
@@ -7097,14 +7116,14 @@ do
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.e(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.e
+        function __DARKLUA_BUNDLE_MODULES.f(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.f
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.e = v
+                __DARKLUA_BUNDLE_MODULES.cache.f = v
             end
 
             return v.c
@@ -7944,14 +7963,14 @@ do
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.f(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.f
+        function __DARKLUA_BUNDLE_MODULES.g(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.g
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.f = v
+                __DARKLUA_BUNDLE_MODULES.cache.g = v
             end
 
             return v.c
@@ -8585,14 +8604,14 @@ do
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.g(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.g
+        function __DARKLUA_BUNDLE_MODULES.h(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.h
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.g = v
+                __DARKLUA_BUNDLE_MODULES.cache.h = v
             end
 
             return v.c
@@ -9178,14 +9197,14 @@ do
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.h(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.h
+        function __DARKLUA_BUNDLE_MODULES.i(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.i
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.h = v
+                __DARKLUA_BUNDLE_MODULES.cache.i = v
             end
 
             return v.c
@@ -9563,14 +9582,14 @@ do
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.i(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.i
+        function __DARKLUA_BUNDLE_MODULES.j(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.j
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.i = v
+                __DARKLUA_BUNDLE_MODULES.cache.j = v
             end
 
             return v.c
@@ -11974,14 +11993,14 @@ do
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.j(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.j
+        function __DARKLUA_BUNDLE_MODULES.k(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.k
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.j = v
+                __DARKLUA_BUNDLE_MODULES.cache.k = v
             end
 
             return v.c
@@ -20436,14 +20455,14 @@ end
             end
         end
 
-        function __DARKLUA_BUNDLE_MODULES.k(): typeof(__modImpl())
-            local v = __DARKLUA_BUNDLE_MODULES.cache.k
+        function __DARKLUA_BUNDLE_MODULES.l(): typeof(__modImpl())
+            local v = __DARKLUA_BUNDLE_MODULES.cache.l
 
             if not v then
                 v = {
                     c = __modImpl(),
                 }
-                __DARKLUA_BUNDLE_MODULES.cache.k = v
+                __DARKLUA_BUNDLE_MODULES.cache.l = v
             end
 
             return v.c
@@ -20476,6 +20495,7 @@ __DARKLUA_BUNDLE_MODULES.h()(env)
 __DARKLUA_BUNDLE_MODULES.i()(env)
 __DARKLUA_BUNDLE_MODULES.j()(env)
 __DARKLUA_BUNDLE_MODULES.k()(env)
+__DARKLUA_BUNDLE_MODULES.l()(env)
 
 if IsOnMobile then
     local QuickCapture = Instance.new('TextButton')
