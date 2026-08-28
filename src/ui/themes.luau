@@ -679,7 +679,7 @@ return function(env)
 	end)
 
 	On.MouseButton1Click:Connect(function()
-		if isHidden == false then
+		if not isHidden then
 			if StayOpen == false then
 				StayOpen = true
 				On.BackgroundTransparency = 0
