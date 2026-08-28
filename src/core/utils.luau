@@ -417,7 +417,7 @@ return function(env)
 			end
 			notify("Spectate", "View turned off (player left)")
 		end
-		eventEditor.FireEvent("OnLeave", player.Name)
+		if eventEditor then eventEditor.FireEvent("OnLeave", player.Name) end
 	end)
 
 	Exit.MouseButton1Down:Connect(function()
@@ -433,7 +433,7 @@ return function(env)
 	end)
 
 	EventBind.MouseButton1Click:Connect(function()
-		eventEditor.Frame:TweenPosition(UDim2.new(0.5, -175, 0.5, -101), "InOut", "Quart", 0.5, true, nil)
+		if eventEditor then eventEditor.Frame:TweenPosition(UDim2.new(0.5, -175, 0.5, -101), "InOut", "Quart", 0.5, true, nil) end
 	end)
 
 	Keybinds.MouseButton1Click:Connect(function()
@@ -840,6 +840,25 @@ return function(env)
 		end)
 	end
 
+	if currentShade1 == nil then
+		currentShade1 = Color3.fromRGB(36, 36, 37)
+	end
+	if currentShade2 == nil then
+		currentShade2 = Color3.fromRGB(46, 46, 47)
+	end
+	if currentShade3 == nil then
+		currentShade3 = Color3.fromRGB(78, 78, 79)
+	end
+	if currentText1 == nil then
+		currentText1 = Color3.new(1, 1, 1)
+	end
+	if currentText2 == nil then
+		currentText2 = Color3.new(0, 0, 0)
+	end
+	if currentScroll == nil then
+		currentScroll = Color3.fromRGB(78, 78, 79)
+	end
+
 	local loadedEventData = nil
 	local jsonAttempts = 0
 	function saves()
@@ -960,7 +979,7 @@ return function(env)
 				binds = binds,
 				WayPoints = WayPoints,
 				PluginsTable = PluginsTable,
-				eventBinds = eventEditor.SaveData(),
+				eventBinds = eventEditor and eventEditor.SaveData() or {},
 				spawnCmds = spawnCmds,
 			}
 			writefile("ZY_FE.zy", HttpService:JSONEncode(data), true)
