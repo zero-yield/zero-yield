@@ -248,11 +248,11 @@ return function(env)
 				writefile(name, data, true)
 			else
 				repeat
-					wait()
+					task.wait()
 				until cooldown == false
 				writefileCooldown(name, data)
 			end
-			wait(3)
+			task.wait(3)
 			cooldown = false
 		end)
 	end
@@ -442,7 +442,7 @@ return function(env)
 
 	Keybinds.MouseButton1Click:Connect(function()
 		KeybindsFrame:TweenPosition(UDim2.new(0, 0, 0, 0), "InOut", "Quart", 0.5, true, nil)
-		wait(0.5)
+		task.wait(0.5)
 		SettingsHolder.Visible = false
 	end)
 
@@ -453,7 +453,7 @@ return function(env)
 
 	Keybinds.MouseButton1Click:Connect(function()
 		KeybindsFrame:TweenPosition(UDim2.new(0, 0, 0, 0), "InOut", "Quart", 0.5, true, nil)
-		wait(0.5)
+		task.wait(0.5)
 		SettingsHolder.Visible = false
 	end)
 
@@ -475,7 +475,7 @@ return function(env)
 
 	Aliases.MouseButton1Click:Connect(function()
 		AliasesFrame:TweenPosition(UDim2.new(0, 0, 0, 0), "InOut", "Quart", 0.5, true, nil)
-		wait(0.5)
+		task.wait(0.5)
 		SettingsHolder.Visible = false
 	end)
 
@@ -486,7 +486,7 @@ return function(env)
 
 	Positions.MouseButton1Click:Connect(function()
 		PositionsFrame:TweenPosition(UDim2.new(0, 0, 0, 0), "InOut", "Quart", 0.5, true, nil)
-		wait(0.5)
+		task.wait(0.5)
 		SettingsHolder.Visible = false
 	end)
 
@@ -647,7 +647,7 @@ return function(env)
 			local char = plr.CharacterAdded:Wait()
 			local humanoid = char:FindFirstChildOfClass("Humanoid")
 			while not humanoid do
-				wait()
+				task.wait()
 				humanoid = char:FindFirstChildOfClass("Humanoid")
 			end
 			humanoid.RootPart.CFrame, workspace.CurrentCamera.CFrame = pos, task.wait() and pos1
@@ -670,7 +670,7 @@ return function(env)
 					end
 				end)
 			else
-				wait(2)
+				task.wait(2)
 				onDied()
 			end
 		end)
@@ -687,12 +687,12 @@ return function(env)
 		end
 
 		repeat
-			wait()
+			task.wait()
 		until getRoot(Players.LocalPlayer.Character)
 
 		pcall(function()
 			if spawnpoint and not refreshCmd and spawnpos ~= nil then
-				wait(spDelay)
+				task.wait(spDelay)
 				getRoot(Players.LocalPlayer.Character).CFrame = spawnpos
 			end
 		end)
@@ -1004,9 +1004,9 @@ return function(env)
 	end
 
 	function Time()
-		local HOUR = math.floor((tick() % 86400) / 3600)
-		local MINUTE = math.floor((tick() % 3600) / 60)
-		local SECOND = math.floor(tick() % 60)
+		local HOUR = math.floor((os.time() % 86400) / 3600)
+		local MINUTE = math.floor((os.time() % 3600) / 60)
+		local SECOND = math.floor(os.time() % 60)
 		local AP = HOUR > 11 and "PM" or "AM"
 		HOUR = (HOUR % 12 == 0 and 12 or HOUR % 12)
 		HOUR = HOUR < 10 and "0" .. HOUR or HOUR
@@ -1056,7 +1056,7 @@ return function(env)
 					pinNotification:Disconnect()
 					notificationPinned = true
 					Notification.Title.BackgroundTransparency = 1
-					wait(0.5)
+					task.wait(0.5)
 					Notification.Title.BackgroundTransparency = 0
 				end)
 			end)
@@ -1068,7 +1068,7 @@ return function(env)
 				true,
 				nil
 			)
-			wait(0.6)
+			task.wait(0.6)
 			local closepressed = false
 			if text2 then
 				Notification.Title.Text = text
@@ -1098,9 +1098,9 @@ return function(env)
 				pinNotification:Disconnect()
 			end)
 			if length and isNumber(length) then
-				wait(length)
+				task.wait(length)
 			else
-				wait(10)
+				task.wait(10)
 			end
 			if LnotifyCount == notifyCount then
 				if closepressed == false and notificationPinned == false then
@@ -1204,9 +1204,9 @@ return function(env)
 
 	Holder.MouseLeave:Connect(function()
 		if not Cmdbar:IsFocused() then
-			local reqTime = tick()
+			local reqTime = os.clock()
 			lastMinimizeReq = reqTime
-			wait(1)
+			task.wait(1)
 			if lastMinimizeReq ~= reqTime then
 				return
 			end

@@ -222,7 +222,7 @@ return function(env)
 							elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
 								local releaseEvent, runEvent
 
-								local startTime = tick()
+								local startTime = os.clock()
 								local pressing = true
 								local startNum = tonumber(frame.Text)
 
@@ -241,11 +241,11 @@ return function(env)
 								startNum = startNum + 1
 								func(startNum)
 								while pressing do
-									if tick() - startTime > 0.3 then
+									if os.clock() - startTime > 0.3 then
 										startNum = startNum + 1
 										func(startNum)
 									end
-									wait(0.1)
+									task.wait(0.1)
 								end
 							end
 						end)
@@ -262,7 +262,7 @@ return function(env)
 							elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
 								local releaseEvent, runEvent
 
-								local startTime = tick()
+								local startTime = os.clock()
 								local pressing = true
 								local startNum = tonumber(frame.Text)
 
@@ -281,11 +281,11 @@ return function(env)
 								startNum = startNum - 1
 								func(startNum)
 								while pressing do
-									if tick() - startTime > 0.3 then
+									if os.clock() - startTime > 0.3 then
 										startNum = startNum - 1
 										func(startNum)
 									end
-									wait(0.1)
+									task.wait(0.1)
 								end
 							end
 						end)
@@ -638,7 +638,7 @@ return function(env)
 			local Npicker = ColorPicker.new()
 			Npicker.Confirm = function(self, color, ctype)
 				updateColors(color, ctype)
-				wait()
+				task.wait()
 				updatesaves()
 			end
 			Npicker.Cancel = function(self)
@@ -648,7 +648,7 @@ return function(env)
 				updateColors(cache_currentText1, text1)
 				updateColors(cache_currentText2, text2)
 				updateColors(cache_currentScroll, scroll)
-				wait()
+				task.wait()
 				updatesaves()
 			end
 			Npicker.Default = function(self)
@@ -658,7 +658,7 @@ return function(env)
 				updateColors(Color3.new(1, 1, 1), text1)
 				updateColors(Color3.new(0, 0, 0), text2)
 				updateColors(Color3.fromRGB(78, 78, 79), scroll)
-				wait()
+				task.wait()
 				updatesaves()
 			end
 		else

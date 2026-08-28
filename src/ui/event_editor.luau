@@ -51,7 +51,7 @@ return function(env)
 							if cmdStr:lower():match("plugin") then
 								return
 							end
-							wait(cmd[3] or 0)
+							task.wait(cmd[3] or 0)
 							execCmd(cmdStr)
 						end))
 					end
@@ -3464,9 +3464,9 @@ return function(env)
 			else
 				inviteButton.Text = "No Clipboard Function, type out the link"
 			end
-			local pressTime = tick()
+			local pressTime = os.clock()
 			lastPress = pressTime
-			wait(2)
+			task.wait(2)
 			if lastPress ~= pressTime then
 				return
 			end

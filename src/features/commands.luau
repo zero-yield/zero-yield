@@ -407,10 +407,10 @@ return function(env)
 
 			local SINFOGUI = background
 			FRAME:TweenPosition(UDim2.new(0.5, -130, 0, 100), "InOut", "Quart", 0.5, true, nil)
-			wait(0.5)
+			task.wait(0.5)
 			Exit.MouseButton1Click:Connect(function()
 				FRAME:TweenPosition(UDim2.new(0.5, -130, 0, -500), "InOut", "Quart", 0.5, true, nil)
-				wait(0.6)
+				task.wait(0.6)
 				FRAME:Destroy()
 				canOpenServerinfo = true
 			end)
@@ -451,7 +451,7 @@ return function(env)
 				else
 					SINFOGUI.Time.Text = hours .. " Hour(s), " .. minutes .. " Minute(s), " .. seconds .. " Second(s)"
 				end
-				wait(1)
+				task.wait(1)
 			until SINFOGUI.Parent == nil
 		end)
 	end)
@@ -465,7 +465,7 @@ return function(env)
 	end)
 
 	addcmd("breakloops", { "break" }, function(args, speaker)
-		lastBreakTime = tick()
+		lastBreakTime = os.clock()
 	end)
 
 	addcmd("gametp", { "gameteleport" }, function(args, speaker)
@@ -485,8 +485,8 @@ if ok and typeof(data) == "CFrame" then
     local Character = ME.Character or ME.CharacterAdded:Wait()
     Character:WaitForChild("HumanoidRootPart")
 
-    local t = tick()
-    while (tick() - t) <= 0.3 do
+    local t = os.clock()
+    while (os.clock() - t) <= 0.3 do
         Character:PivotTo(data)
         task.wait()
     end
@@ -880,7 +880,7 @@ end
 	addcmd("fly", {}, function(args, speaker)
 		if not IsOnMobile then
 			NOFLY()
-			wait()
+			task.wait()
 			sFLY()
 		else
 			mobilefly(speaker)
@@ -908,7 +908,7 @@ end
 	addcmd("vfly", { "vehiclefly" }, function(args, speaker)
 		if not IsOnMobile then
 			NOFLY()
-			wait()
+			task.wait()
 			sFLY(true)
 		else
 			mobilefly(speaker, true)
@@ -1217,7 +1217,7 @@ end
 		AliasesFrame:TweenPosition(UDim2.new(0, 0, 0, 175), "InOut", "Quart", 0.5, true, nil)
 		PluginsFrame:TweenPosition(UDim2.new(0, 0, 0, 175), "InOut", "Quart", 0.5, true, nil)
 		PositionsFrame:TweenPosition(UDim2.new(0, 0, 0, 0), "InOut", "Quart", 0.5, true, nil)
-		wait(0.5)
+		task.wait(0.5)
 		SettingsHolder.Visible = false
 		maximizeHolder()
 	end)
@@ -1225,7 +1225,7 @@ end
 	waypointParts = {}
 	addcmd("showwaypoints", { "showwp", "showwps" }, function(args, speaker)
 		execCmd("hidewaypoints")
-		wait()
+		task.wait()
 		for i, _ in pairs(WayPoints) do
 			local x = WayPoints[i].COORD[1]
 			local y = WayPoints[i].COORD[2]
@@ -1329,7 +1329,7 @@ end
 						and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 					then
 						speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-						wait(0.1)
+						task.wait(0.1)
 					end
 					speaker.Character:FindFirstChildOfClass("Humanoid").WalkToPoint = Vector3.new(x, y, z)
 				end
@@ -1341,7 +1341,7 @@ end
 						and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 					then
 						speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-						wait(0.1)
+						task.wait(0.1)
 					end
 					speaker.Character:FindFirstChildOfClass("Humanoid").WalkToPoint =
 						Vector3.new(pWayPoints[i].COORD[1].Position)
@@ -1975,7 +1975,7 @@ end
 			notify("Spectate", "Viewing " .. Players[v].Name)
 			local function viewDiedFunc()
 				repeat
-					wait()
+					task.wait()
 				until Players[v].Character ~= nil and getRoot(Players[v].Character)
 				workspace.CurrentCamera.CameraSubject = viewing.Character
 			end
@@ -1992,7 +1992,7 @@ end
 		if args[1] then
 			for i, v in pairs(workspace:GetDescendants()) do
 				if v.Name:lower() == getstring(1, args):lower() and v:IsA("BasePart") then
-					wait(0.1)
+					task.wait(0.1)
 					workspace.CurrentCamera.CameraSubject = v
 				end
 			end
@@ -2384,13 +2384,13 @@ end
 		end
 		speaker.CameraMaxZoomDistance = 0.5
 		speaker.CameraMinZoomDistance = 0.5
-		wait()
+		task.wait()
 		local players = getPlayer(args[1], speaker)
 		for i, v in pairs(players) do
 			local target = Players[v].Character
 			if target and target:FindFirstChild("Head") then
 				workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.p, target.Head.CFrame.p)
-				wait(0.1)
+				task.wait(0.1)
 			end
 		end
 		speaker.CameraMaxZoomDistance = preMaxZoom
@@ -2401,9 +2401,9 @@ end
 		StopFreecam()
 		execCmd("unview")
 		workspace.CurrentCamera:remove()
-		wait(0.1)
+		task.wait(0.1)
 		repeat
-			wait()
+			task.wait()
 		until speaker.Character ~= nil
 		workspace.CurrentCamera.CameraSubject = speaker.Character:FindFirstChildWhichIsA("Humanoid")
 		workspace.CurrentCamera.CameraType = "Custom"
@@ -2469,7 +2469,7 @@ end
 		end
 		speaker.CameraMaxZoomDistance = args[1]
 		speaker.CameraMinZoomDistance = args[1]
-		wait()
+		task.wait()
 		speaker.CameraMaxZoomDistance = camMax
 		speaker.CameraMinZoomDistance = camMin
 	end)
@@ -2918,10 +2918,10 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
 				getRoot(speaker.Character).CFrame = getRoot(Players[v].Character).CFrame + Vector3.new(3, 1, 0)
-				wait(seconds)
+				task.wait(seconds)
 				getRoot(speaker.Character).CFrame = startPos
 			end
 		end
@@ -2938,7 +2938,7 @@ end
 				vehicleModel = vehicleModel.Parent
 			end
 		until vehicleModel.ClassName == "Model"
-		wait(0.1)
+		task.wait(0.1)
 		execCmd("noclip")
 		for i, v in pairs(vehicleModel:GetDescendants()) do
 			if v:IsA("BasePart") and v.CanCollide then
@@ -2967,7 +2967,7 @@ end
 				if Players[v].Character:FindFirstChildOfClass("Humanoid") then
 					Players[v].Character:FindFirstChildOfClass("Humanoid").Sit = false
 				end
-				wait()
+				task.wait()
 				getRoot(Players[v].Character).CFrame = getRoot(speaker.Character).CFrame + Vector3.new(3, 1, 0)
 			end
 		end
@@ -3004,7 +3004,7 @@ end
 									getRoot(pchar).CFrame = getRoot(speaker.Character).CFrame
 										+ Vector3.new(distance, 1, 0)
 								end
-								wait(lDelay)
+								task.wait(lDelay)
 							else
 								for a, b in pairs(bringT) do
 									if b == plrName then
@@ -3043,11 +3043,11 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
 				walkto = true
 				repeat
-					wait()
+					task.wait()
 					speaker.Character:FindFirstChildOfClass("Humanoid"):MoveTo(getRoot(Players[v].Character).Position)
 				until Players[v].Character == nil or not getRoot(Players[v].Character) or walkto == false
 			end
@@ -3056,7 +3056,7 @@ end
 
 	addcmd("pathfindwalkto", { "pathfindfollow" }, function(args, speaker)
 		walkto = false
-		wait()
+		task.wait()
 		local players = getPlayer(args[1], speaker)
 		local hum = Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 		local path = PathService:CreatePath()
@@ -3067,11 +3067,11 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
 				walkto = true
 				repeat
-					wait()
+					task.wait()
 					local success, response = pcall(function()
 						path:ComputeAsync(getRoot(speaker.Character).Position, getRoot(Players[v].Character).Position)
 						local waypoints = path:GetWaypoints()
@@ -3081,7 +3081,7 @@ end
 							hum:MoveTo(waypointPosition)
 							repeat
 								distance = (waypointPosition - hum.Parent.PrimaryPart.Position).magnitude
-								wait()
+								task.wait()
 							until distance <= 5
 						end
 					end)
@@ -3097,7 +3097,7 @@ end
 
 	addcmd("pathfindwalktowaypoint", { "pathfindwalktowp" }, function(args, speaker)
 		waypointwalkto = false
-		wait()
+		task.wait()
 		local WPName = tostring(getstring(1, args))
 		local hum = Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 		local path = PathService:CreatePath()
@@ -3109,12 +3109,12 @@ end
 						and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 					then
 						speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-						wait(0.1)
+						task.wait(0.1)
 					end
 					local TrueCoords = Vector3.new(WayPoints[i].COORD[1], WayPoints[i].COORD[2], WayPoints[i].COORD[3])
 					waypointwalkto = true
 					repeat
-						wait()
+						task.wait()
 						local success, response = pcall(function()
 							path:ComputeAsync(getRoot(speaker.Character).Position, TrueCoords)
 							local waypoints = path:GetWaypoints()
@@ -3124,7 +3124,7 @@ end
 								hum:MoveTo(waypointPosition)
 								repeat
 									distance = (waypointPosition - hum.Parent.PrimaryPart.Position).magnitude
-									wait()
+									task.wait()
 								until distance <= 5
 							end
 						end)
@@ -3141,12 +3141,12 @@ end
 						and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 					then
 						speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-						wait(0.1)
+						task.wait(0.1)
 					end
 					local TrueCoords = pWayPoints[i].COORD[1].Position
 					waypointwalkto = true
 					repeat
-						wait()
+						task.wait()
 						local success, response = pcall(function()
 							path:ComputeAsync(getRoot(speaker.Character).Position, TrueCoords)
 							local waypoints = path:GetWaypoints()
@@ -3156,7 +3156,7 @@ end
 								hum:MoveTo(waypointPosition)
 								repeat
 									distance = (waypointPosition - hum.Parent.PrimaryPart.Position).magnitude
-									wait()
+									task.wait()
 								until distance <= 5
 							end
 						end)
@@ -3270,7 +3270,7 @@ end
 	addcmd("loopoof", {}, function(args, speaker)
 		oofing = true
 		repeat
-			wait(0.1)
+			task.wait(0.1)
 			for i, v in pairs(Players:GetPlayers()) do
 				if v.Character ~= nil and v.Character:FindFirstChild("Head") then
 					for _, x in pairs(v.Character.Head:GetChildren()) do
@@ -3406,7 +3406,7 @@ end
 		-- Full credit to AmokahFox @V3rmillion
 		local Player = speaker
 		repeat
-			wait(0.1)
+			task.wait(0.1)
 		until Player.Character
 		local Character = Player.Character
 		Character.Archivable = true
@@ -3459,7 +3459,7 @@ end
 			if IsInvis == true then
 				pcall(function()
 					Player.Character = Character
-					wait()
+					task.wait()
 					Character.Parent = workspace
 					Character:FindFirstChildWhichIsA("Humanoid"):Destroy()
 					IsInvis = false
@@ -3469,7 +3469,7 @@ end
 			elseif IsInvis == false then
 				pcall(function()
 					Player.Character = Character
-					wait()
+					task.wait()
 					Character.Parent = workspace
 					Character:FindFirstChildWhichIsA("Humanoid"):Destroy()
 					TurnVisible()
@@ -3491,7 +3491,7 @@ end
 		local CF_1 = Player.Character.Humanoid.RootPart.CFrame
 		Character:MoveTo(Vector3.new(0, math.pi * 1000000, 0))
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
-		wait(0.2)
+		task.wait(0.2)
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
 		InvisibleCharacter = InvisibleCharacter
 		Character.Parent = Lighting
@@ -3564,7 +3564,7 @@ end
 			end
 		end)
 		repeat
-			wait()
+			task.wait()
 		until Char
 		local cleanUp
 		cleanUp = Players.LocalPlayer.CharacterAdded:connect(function(char)
@@ -3610,7 +3610,7 @@ end
 
 	addcmd("breakvelocity", {}, function(args, speaker)
 		local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
-		delay(1, function()
+		task.delay(1, function()
 			BeenASecond = true
 		end)
 		while not BeenASecond do
@@ -3619,7 +3619,7 @@ end
 					v.Velocity, v.RotVelocity = V3, V3
 				end
 			end
-			wait()
+			task.wait()
 		end
 	end)
 
@@ -3830,7 +3830,7 @@ end
 			if not infJumpDebounce then
 				infJumpDebounce = true
 				speaker.Character:FindFirstChildWhichIsA("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
-				wait()
+				task.wait()
 				infJumpDebounce = false
 			end
 		end)
@@ -3983,7 +3983,7 @@ end
 			end
 			local function charPartAdded(part)
 				if part:IsA("BillboardGui") or part:IsA("SurfaceGui") then
-					wait()
+					task.wait()
 					part:Destroy()
 				end
 			end
@@ -4309,7 +4309,7 @@ end
 			and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 		then
 			speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-			wait(0.1)
+			task.wait(0.1)
 		end
 		speaker.Character:FindFirstChildOfClass("Humanoid").WalkToPoint = Vector3.new(args[1], args[2], args[3])
 	end)
@@ -4541,7 +4541,7 @@ end
 				printoutput(message)
 			end
 		end
-		wait(1)
+		task.wait(1)
 		notify("Console", "Press F9 to open the console")
 	end)
 
@@ -4583,7 +4583,7 @@ end
 				and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 			then
 				speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-				wait(0.1)
+				task.wait(0.1)
 			end
 			loopgoto = Players[v]
 			local distance = 3
@@ -4600,7 +4600,7 @@ end
 						getRoot(speaker.Character).CFrame = getRoot(Players[v].Character).CFrame
 							+ Vector3.new(distance, 1, 0)
 					end
-					wait(lDelay)
+					task.wait(lDelay)
 				else
 					loopgoto = nil
 				end
@@ -4648,7 +4648,7 @@ end
 		spamming = true
 		local spamstring = getstring(1, args)
 		repeat
-			wait(spamspeed)
+			task.wait(spamspeed)
 			chatMessage(spamstring)
 		until spamming == false
 	end)
@@ -4681,7 +4681,7 @@ end
 				local pmspamstring = getstring(2, args)
 				repeat
 					if Players:FindFirstChild(v) then
-						wait(spamspeed)
+						task.wait(spamspeed)
 						chatMessage("/w " .. plrName .. " " .. pmspamstring)
 					else
 						for a, b in pairs(pmspamming) do
@@ -4819,7 +4819,7 @@ end
 
 	addcmd("bang", { "rape" }, function(args, speaker)
 		execCmd("unbang")
-		wait()
+		task.wait()
 		local humanoid = speaker.Character:FindFirstChildWhichIsA("Humanoid")
 		bangAnim = Instance.new("Animation")
 		bangAnim.AnimationId = not r15(speaker) and "rbxassetid://148840371" or "rbxassetid://5918726674"
@@ -4860,7 +4860,7 @@ end
 	addcmd("carpet", {}, function(args, speaker)
 		if not r15(speaker) then
 			execCmd("uncarpet")
-			wait()
+			task.wait()
 			local players = getPlayer(args[1], speaker)
 			for i, v in pairs(players) do
 				carpetAnim = Instance.new("Animation")
@@ -4933,9 +4933,9 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
-				wait(gotopartDelay)
+				task.wait(gotopartDelay)
 				getRoot(speaker.Character).CFrame = v.CFrame
 			end
 		end
@@ -4949,9 +4949,9 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
-				wait(gotopartDelay)
+				task.wait(gotopartDelay)
 				TweenService:Create(
 					getRoot(speaker.Character),
 					TweenInfo.new(tweenSpeed, Enum.EasingStyle.Linear),
@@ -4969,9 +4969,9 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
-				wait(gotopartDelay)
+				task.wait(gotopartDelay)
 				getRoot(speaker.Character).CFrame = v.CFrame
 			end
 		end
@@ -4985,9 +4985,9 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
-				wait(gotopartDelay)
+				task.wait(gotopartDelay)
 				TweenService:Create(
 					getRoot(speaker.Character),
 					TweenInfo.new(tweenSpeed, Enum.EasingStyle.Linear),
@@ -5005,9 +5005,9 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
-				wait(gotopartDelay)
+				task.wait(gotopartDelay)
 				getRoot(speaker.Character).CFrame = v:GetModelCFrame()
 			end
 		end
@@ -5021,9 +5021,9 @@ end
 					and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 				then
 					speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-					wait(0.1)
+					task.wait(0.1)
 				end
-				wait(gotopartDelay)
+				task.wait(gotopartDelay)
 				TweenService:Create(
 					getRoot(speaker.Character),
 					TweenInfo.new(tweenSpeed, Enum.EasingStyle.Linear),
@@ -5108,7 +5108,7 @@ end
 	addcmd("instantproximityprompts", { "instantpp" }, function(args, speaker)
 		if fireproximityprompt then
 			execCmd("uninstantproximityprompts")
-			wait(0.1)
+			task.wait(0.1)
 			PromptButtonHoldBegan = ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt)
 				fireproximityprompt(prompt)
 			end)
@@ -5259,7 +5259,7 @@ end
 				and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
 			then
 				speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
-				wait(0.1)
+				task.wait(0.1)
 			end
 			getRoot(speaker.Character).CFrame = lastDeath
 		end
@@ -5267,7 +5267,7 @@ end
 
 	addcmd("hatspin", { "spinhats" }, function(args, speaker)
 		execCmd("unhatspin")
-		wait(0.5)
+		task.wait(0.5)
 		for _, v in pairs(speaker.Character:FindFirstChildOfClass("Humanoid"):GetAccessories()) do
 			local keep = Instance.new("BodyPosition")
 			keep.Name = randomString()
@@ -5304,7 +5304,7 @@ end
 					c:Destroy()
 				end
 			end
-			wait()
+			task.wait()
 			v.Parent = speaker.Character
 		end
 	end)
@@ -5328,15 +5328,15 @@ end
 
 			for i = 1, #Hats do
 				repeat
-					RunService.Heartbeat:wait()
+					RunService.Heartbeat:Wait()
 				until Hats[i]
 				firetouchinterest(Hats[i].Handle, getRoot(Character), 0)
 				repeat
-					RunService.Heartbeat:wait()
+					RunService.Heartbeat:Wait()
 				until Character:FindFirstChildOfClass("Accessory")
 				Character:FindFirstChildOfClass("Accessory"):Destroy()
 				repeat
-					RunService.Heartbeat:wait()
+					RunService.Heartbeat:Wait()
 				until not Character:FindFirstChildOfClass("Accessory")
 			end
 
@@ -5437,8 +5437,8 @@ end
 		for i = 1, LOOP_NUM do
 			local Human = speaker.Character:WaitForChild("Humanoid")
 			Human.Parent:MoveTo(TempPos)
-			wait(0.1)
-			Human.RootPart.Anchored = speaker:ClearCharacterAppearance(wait(0.1)) or true
+			task.wait(0.1)
+			Human.RootPart.Anchored = speaker:ClearCharacterAppearance(task.wait(0.1)) or true
 			local t = GetHandleTools(speaker)
 			while #t > 0 do
 				for _, v in ipairs(t) do
@@ -5455,12 +5455,12 @@ end
 				end
 				t = GetHandleTools(speaker)
 			end
-			wait(0.1)
+			task.wait(0.1)
 			speaker.Character = speaker.Character:Destroy()
 			speaker.CharacterAdded
 				:Wait()
 				:WaitForChild("Humanoid").Parent
-				:MoveTo(LOOP_NUM == i and OrigPos or TempPos, wait(0.1))
+				:MoveTo(LOOP_NUM == i and OrigPos or TempPos, task.wait(0.1))
 			if i == LOOP_NUM or i % 5 == 0 then
 				local HRP = speaker.Character.Humanoid.RootPart
 				if type(firetouchinterest) == "function" then
@@ -5475,13 +5475,13 @@ end
 							v.Anchored = false
 							for _ = 1, 10 do
 								v.CFrame = HRP.CFrame
-								wait()
+								task.wait()
 							end
 							v.CanCollide = x
 						end)
 					end
 				end
-				wait(0.1)
+				task.wait(0.1)
 				Tools = {}
 			end
 			TempPos = TempPos + Vector3.new(10, math.random(-5, 5), 0)
@@ -5500,7 +5500,7 @@ end
 			x = x.FindFirstAncestorWhichIsA(x, "Part")
 			if x then
 				return task.spawn(function()
-					firetouchinterest(x, Root, 1, wait() and firetouchinterest(x, Root, 0))
+					firetouchinterest(x, Root, 1, task.wait() and firetouchinterest(x, Root, 0))
 				end)
 			end
 			x.CFrame = Root.CFrame
@@ -5664,7 +5664,7 @@ end
 				v.Parent = Players.LocalPlayer.Character
 			end
 		end
-		wait()
+		task.wait()
 		for i, v in pairs(Players.LocalPlayer.Character:GetChildren()) do
 			if v:IsA("Tool") then
 				v.Parent = workspace
@@ -5693,7 +5693,7 @@ end
 	local currentGripPos = ""
 	addcmd("reach", {}, function(args, speaker)
 		execCmd("unreach")
-		wait()
+		task.wait()
 		for i, v in pairs(speaker.Character:GetDescendants()) do
 			if v:IsA("Tool") then
 				if args[1] then
@@ -5725,7 +5725,7 @@ end
 
 	addcmd("boxreach", {}, function(args, speaker)
 		execCmd("unreach")
-		wait()
+		task.wait()
 		for i, v in pairs(speaker.Character:GetDescendants()) do
 			if v:IsA("Tool") then
 				local size = tonumber(args[1]) or 60
@@ -5773,7 +5773,7 @@ end
 				for _ = 1, amount do
 					v:Activate()
 					if delay_ then
-						wait(delay_)
+						task.wait(delay_)
 					end
 				end
 				v.Parent = Backpack
@@ -6029,9 +6029,9 @@ end
 		z3.Parent = prt
 		z1.Position = Vector3.new(0, 9999, 0)
 		speaker.Character = prt
-		wait(3)
+		task.wait(3)
 		speaker.Character = ch
-		wait(3)
+		task.wait(3)
 		local Hum = Instance.new("Humanoid")
 		z2:Clone()
 		Hum.Parent = speaker.Character
@@ -6099,7 +6099,7 @@ end
 			local newHum = hum:Clone()
 			newHum.Parent = char
 			newHum.Name = "Humanoid"
-			wait()
+			task.wait()
 			hum:Destroy()
 			workspace.CurrentCamera.CameraSubject = char
 			newHum.DisplayDistanceType = "None"
@@ -6111,7 +6111,7 @@ end
 				* CFrame.new(math.random(-100, 100) / 200, math.random(-100, 100) / 200, math.random(-100, 100) / 200)
 			local n = 0
 			repeat
-				wait(0.1)
+				task.wait(0.1)
 				n = n + 1
 				hrp.CFrame = hrp2.CFrame
 			until (tool.Parent ~= char or not hrp or not hrp2 or not hrp.Parent or not hrp2.Parent or n > 250) and n > 2
@@ -6126,16 +6126,16 @@ end
 				local NormPos = getRoot(speaker.Character).CFrame
 				if not fast then
 					refresh(speaker)
-					wait()
+					task.wait()
 					repeat
-						wait()
+						task.wait()
 					until speaker.Character ~= nil and getRoot(speaker.Character)
-					wait(0.3)
+					task.wait(0.3)
 				end
 				local hrp = getRoot(speaker.Character)
 				attach(speaker, target)
 				repeat
-					wait()
+					task.wait()
 					hrp.CFrame = CFrame.new(999999, workspace.FallenPartsDestroyHeight + 5, 999999)
 				until not getRoot(target.Character) or not getRoot(speaker.Character)
 				local char = speaker.CharacterAdded:Wait()
@@ -6233,16 +6233,16 @@ end
 				local NormPos = getRoot(speaker.Character).CFrame
 				if not fast then
 					refresh(speaker)
-					wait()
+					task.wait()
 					repeat
-						wait()
+						task.wait()
 					until speaker.Character ~= nil and getRoot(speaker.Character)
-					wait(0.3)
+					task.wait(0.3)
 				end
 				local hrp = getRoot(speaker.Character)
 				attach(speaker, target)
 				repeat
-					wait()
+					task.wait()
 					hrp.CFrame = NormPos
 				until not getRoot(target.Character) or not getRoot(speaker.Character)
 				local char = speaker.CharacterAdded:Wait()
@@ -6263,20 +6263,20 @@ end
 				local NormPos = getRoot(speaker.Character).CFrame
 				if not fast then
 					refresh(speaker)
-					wait()
+					task.wait()
 					repeat
-						wait()
+						task.wait()
 					until speaker.Character ~= nil and getRoot(speaker.Character)
-					wait(0.3)
+					task.wait(0.3)
 				end
 				local hrp = getRoot(speaker.Character)
 				local hrp2 = getRoot(target2.Character)
 				attach(speaker, target)
 				repeat
-					wait()
+					task.wait()
 					hrp.CFrame = hrp2.CFrame
 				until not getRoot(target.Character) or not getRoot(speaker.Character)
-				wait(1)
+				task.wait(1)
 				local char = speaker.CharacterAdded:Wait()
 				local humanoid = char:FindFirstChildOfClass("Humanoid") or char.ChildAdded:Wait()
 				while not humanoid:IsA("Humanoid") do
@@ -6405,7 +6405,7 @@ end
 	addcmd("autoclick", {}, function(args, speaker)
 		if mouse1press and mouse1release then
 			execCmd("unautoclick")
-			wait()
+			task.wait()
 			local clickDelay = 0.1
 			local releaseDelay = 0.1
 			if args[1] and isNumber(args[1]) then
@@ -6428,9 +6428,9 @@ end
 			end)
 			notify("Auto Clicker", "Press [backspace] and [=] at the same time to stop")
 			repeat
-				wait(clickDelay)
+				task.wait(clickDelay)
 				mouse1press()
-				wait(releaseDelay)
+				task.wait(releaseDelay)
 				mouse1release()
 			until autoclicking == false
 		else
@@ -6453,7 +6453,7 @@ end
 	local nbSelection = nil
 	addcmd("hovername", {}, function(args, speaker)
 		execCmd("unhovername")
-		wait()
+		task.wait()
 		nameBox = Instance.new("TextLabel")
 		nameBox.Name = randomString()
 		nameBox.Parent = ScaledHolder
@@ -6869,7 +6869,7 @@ end
 	end)
 
 	addcmd("removeads", { "adblock" }, function(args, speaker)
-		while wait() do
+		while task.wait() do
 			pcall(function()
 				for i, v in pairs(workspace:GetDescendants()) do
 					if v:IsA("PackageLink") then
@@ -7299,7 +7299,7 @@ end
 				return
 			end
 			execCmd("unautokeypress")
-			wait()
+			task.wait()
 			local clickDelay = 0.1
 			local releaseDelay = 0.1
 			if args[2] and isNumber(args[2]) then
@@ -7322,9 +7322,9 @@ end
 			end)
 			notify("Auto Key Press", "Press [backspace] and [=] at the same time to stop")
 			repeat
-				wait(clickDelay)
+				task.wait(clickDelay)
 				keypress(code)
-				wait(releaseDelay)
+				task.wait(releaseDelay)
 				keyrelease(code)
 			until autoKeyPressing == false
 			if cancelAutoKeyPress then
@@ -7354,7 +7354,7 @@ end
 	addcmd("reloadplugin", {}, function(args, speaker)
 		local pluginName = getstring(1, args)
 		deletePlugin(pluginName)
-		wait(1)
+		task.wait(1)
 		addPlugin(pluginName)
 	end)
 

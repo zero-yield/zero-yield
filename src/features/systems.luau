@@ -14,7 +14,7 @@ return function(env)
 					v:Destroy()
 				end
 			end
-			wait()
+			task.wait()
 			if
 				plr.Character
 				and plr.Name ~= Players.LocalPlayer.Name
@@ -24,7 +24,7 @@ return function(env)
 				ESPholder.Name = plr.Name .. "_ESP"
 				ESPholder.Parent = COREGUI
 				repeat
-					wait(1)
+					task.wait(1)
 				until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 				for b, n in pairs(plr.Character:GetChildren()) do
 					if n:IsA("BasePart") then
@@ -74,7 +74,7 @@ return function(env)
 							teamChange:Disconnect()
 							ESPholder:Destroy()
 							repeat
-								wait(1)
+								task.wait(1)
 							until getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 							ESP(plr, logic)
 							addedFunc:Disconnect()
@@ -89,7 +89,7 @@ return function(env)
 							addedFunc:Disconnect()
 							ESPholder:Destroy()
 							repeat
-								wait(1)
+								task.wait(1)
 							until getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 							ESP(plr, logic)
 							teamChange:Disconnect()
@@ -136,7 +136,7 @@ return function(env)
 					v:Destroy()
 				end
 			end
-			wait()
+			task.wait()
 			if
 				plr.Character
 				and plr.Name ~= Players.LocalPlayer.Name
@@ -146,7 +146,7 @@ return function(env)
 				ESPholder.Name = plr.Name .. "_CHMS"
 				ESPholder.Parent = COREGUI
 				repeat
-					wait(1)
+					task.wait(1)
 				until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 				for b, n in pairs(plr.Character:GetChildren()) do
 					if n:IsA("BasePart") then
@@ -169,7 +169,7 @@ return function(env)
 						ESPholder:Destroy()
 						teamChange:Disconnect()
 						repeat
-							wait(1)
+							task.wait(1)
 						until getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 						CHMS(plr)
 						addedFunc:Disconnect()
@@ -183,7 +183,7 @@ return function(env)
 						ESPholder:Destroy()
 						addedFunc:Disconnect()
 						repeat
-							wait(1)
+							task.wait(1)
 						until getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 						CHMS(plr)
 						teamChange:Disconnect()
@@ -207,7 +207,7 @@ return function(env)
 					v:Destroy()
 				end
 			end
-			wait()
+			task.wait()
 			if
 				plr.Character
 				and plr.Name ~= Players.LocalPlayer.Name
@@ -217,7 +217,7 @@ return function(env)
 				ESPholder.Name = plr.Name .. "_LC"
 				ESPholder.Parent = COREGUI
 				repeat
-					wait(1)
+					task.wait(1)
 				until plr.Character and getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 				for b, n in pairs(plr.Character:GetChildren()) do
 					if n:IsA("BasePart") then
@@ -261,7 +261,7 @@ return function(env)
 							teamChange:Disconnect()
 							ESPholder:Destroy()
 							repeat
-								wait(1)
+								task.wait(1)
 							until getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 							Locate(plr)
 							addedFunc:Disconnect()
@@ -276,7 +276,7 @@ return function(env)
 							addedFunc:Disconnect()
 							ESPholder:Destroy()
 							repeat
-								wait(1)
+								task.wait(1)
 							until getRoot(plr.Character) and plr.Character:FindFirstChildOfClass("Humanoid")
 							Locate(plr)
 							teamChange:Disconnect()

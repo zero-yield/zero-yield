@@ -96,7 +96,7 @@ return function(env)
 			local humanoid = character:FindFirstChildOfClass("Humanoid")
 			if humanoid and humanoid.SeatPart then
 				humanoid.Sit = false
-				wait(0.1)
+				task.wait(0.1)
 			end
 
 			local hipHeight = humanoid and humanoid.HipHeight > 0 and (humanoid.HipHeight + 1)
@@ -331,7 +331,7 @@ return function(env)
 	Plugins.MouseButton1Click:Connect(function()
 		if writefileExploit() then
 			PluginsFrame:TweenPosition(UDim2.new(0, 0, 0, 0), "InOut", "Quart", 0.5, true, nil)
-			wait(0.5)
+			task.wait(0.5)
 			SettingsHolder.Visible = false
 		else
 			notify("Incompatible Exploit", "Your exploit is unable to use plugins (missing read/writefile)")
