@@ -220,7 +220,7 @@ return function(env)
 
 			local function Index()
 				if chatbox.Text:lower():sub(1, 1) == prefix then
-					if SettingsOpen == true then
+					if SettingsOpen then
 						wait(0.2)
 						CMDsF.Visible = true
 						Settings:TweenPosition(UDim2.new(0, 0, 0, 220), "InOut", "Quart", 0.2, true, nil)
@@ -231,7 +231,7 @@ return function(env)
 					)
 				else
 					minimizeHolder()
-					if SettingsOpen == true then
+					if SettingsOpen then
 						wait(0.2)
 						Settings:TweenPosition(UDim2.new(0, 0, 0, 45), "InOut", "Quart", 0.2, true, nil)
 						CMDsF.Visible = false
