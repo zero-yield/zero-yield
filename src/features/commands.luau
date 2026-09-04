@@ -2605,13 +2605,14 @@ end
 			end
 		end
 
-		if antiAfkCon then
+		pcall(function()
 			antiAfkCon:Disconnect()
-			antiAfkCon = nil
-		end
+		end)
 		antiAfkCon = speaker.Idled:Connect(function()
-			Services.VirtualUser:CaptureController()
-			Services.VirtualUser:ClickButton2(Vector2.zero)
+			local VirtualInputManager = Instance.new("VirtualInputManager")
+			VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+			VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+			VirtualInputManager:Destroy()
 		end)
 
 		if not (args[1] and tostring(args[1]) == "nonotify") then
