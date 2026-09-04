@@ -145,20 +145,19 @@ return function(env)
 
 	PARENT = nil
 	MAX_DISPLAY_ORDER = 1.7976931348623157e308
-	if get_hidden_gui or gethui then
-		local hiddenUI = get_hidden_gui or gethui
+	if gethui then
 		local Main = Instance.new("ScreenGui")
 		Main.Name = randomString()
 		Main.ResetOnSpawn = false
 		Main.DisplayOrder = MAX_DISPLAY_ORDER
-		Main.Parent = hiddenUI()
+		Main.Parent = gethui()
 		PARENT = Main
-	elseif (not is_sirhurt_closure) and (syn and syn.protect_gui) then
+	elseif (not is_sirhurt_closure) and syn_protect_gui then
 		local Main = Instance.new("ScreenGui")
 		Main.Name = randomString()
 		Main.ResetOnSpawn = false
 		Main.DisplayOrder = MAX_DISPLAY_ORDER
-		syn.protect_gui(Main)
+		syn_protect_gui(Main)
 		Main.Parent = COREGUI
 		PARENT = Main
 	elseif COREGUI:FindFirstChild("RobloxGui") then

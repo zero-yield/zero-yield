@@ -9,6 +9,9 @@ return function(env)
 	cloneref = missing("function", cloneref, function(...)
 		return ...
 	end)
+	gethui = missing("function", gethui or get_hidden_gui)
+	syn = missing("table", syn)
+	syn_protect_gui = missing("function", syn and syn.protect_gui)
 	sethidden = missing("function", sethiddenproperty or set_hidden_property or set_hidden_prop)
 	gethidden = missing("function", gethiddenproperty or get_hidden_property or get_hidden_prop)
 	queueteleport = missing(
