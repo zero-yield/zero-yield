@@ -17,6 +17,9 @@ do
                 cloneref = missing('function', cloneref, function(...)
                     return ...
                 end)
+                gethui = missing('function', gethui or get_hidden_gui)
+                syn = missing('table', syn)
+                syn_protect_gui = missing('function', syn and syn.protect_gui)
                 sethidden = missing('function', sethiddenproperty or set_hidden_property or set_hidden_prop)
                 gethidden = missing('function', gethiddenproperty or get_hidden_property or get_hidden_prop)
                 queueteleport = missing('function', queue_on_teleport or (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport))
@@ -397,23 +400,22 @@ do
                 PARENT = nil
                 MAX_DISPLAY_ORDER = 1.7976931348623157e308
 
-                if get_hidden_gui or gethui then
-                    local hiddenUI = get_hidden_gui or gethui
+                if gethui then
                     local Main = Instance.new('ScreenGui')
 
                     Main.Name = randomString()
                     Main.ResetOnSpawn = false
                     Main.DisplayOrder = MAX_DISPLAY_ORDER
-                    Main.Parent = hiddenUI()
+                    Main.Parent = gethui()
                     PARENT = Main
-                elseif (not is_sirhurt_closure) and (syn and syn.protect_gui) then
+                elseif (not is_sirhurt_closure) and syn_protect_gui then
                     local Main = Instance.new('ScreenGui')
 
                     Main.Name = randomString()
                     Main.ResetOnSpawn = false
                     Main.DisplayOrder = MAX_DISPLAY_ORDER
 
-                    syn.protect_gui(Main)
+                    syn_protect_gui(Main)
 
                     Main.Parent = COREGUI
                     PARENT = Main
@@ -14942,15 +14944,17 @@ end
                             end)
                         end
                     end
-                    if antiAfkCon then
-                        antiAfkCon:Disconnect()
 
-                        antiAfkCon = nil
-                    end
+                    pcall(function()
+                        antiAfkCon:Disconnect()
+                    end)
 
                     antiAfkCon = speaker.Idled:Connect(function()
-                        Services.VirtualUser:CaptureController()
-                        Services.VirtualUser:ClickButton2(Vector2.zero)
+                        local VirtualInputManager = Instance.new('VirtualInputManager')
+
+                        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+                        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+                        VirtualInputManager:Destroy()
                     end)
 
                     if not (args[1] and tostring(args[1]) == 'nonotify') then
