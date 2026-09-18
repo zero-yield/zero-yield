@@ -1172,7 +1172,7 @@ return function(env)
 		end
 	end
 
-	function CreateJoinLabel(plr, ID)
+	function CreateJoinLabel(player, userId)
 		if #scroll_3:GetChildren() >= 2546 then
 			scroll_3:ClearAllChildren()
 		end
@@ -1195,7 +1195,7 @@ return function(env)
 		info1.ZIndex = 10
 		info1.Font = Enum.Font.SourceSans
 		info1.FontSize = Enum.FontSize.Size14
-		info1.Text = "Username: " .. plr.Name .. "\nJoined Server: " .. Time()
+		info1.Text = "Username: " .. player.Name .. "\nJoined Server: " .. Time()
 		info1.TextColor3 = Color3.new(1, 1, 1)
 		info1.TextWrapped = true
 		info1.TextXAlignment = Enum.TextXAlignment.Left
@@ -1209,7 +1209,7 @@ return function(env)
 		info2.ZIndex = 10
 		info2.Font = Enum.Font.SourceSans
 		info2.FontSize = Enum.FontSize.Size14
-		info2.Text = "User ID: " .. ID .. "\nAccount Age: " .. plr.AccountAge .. "\nJoined Roblox: Loading..."
+		info2.Text = "User ID: " .. userId .. "\nAccount Age: " .. player.AccountAge .. "\nJoined Roblox: Loading..."
 		info2.TextColor3 = Color3.new(1, 1, 1)
 		info2.TextWrapped = true
 		info2.TextXAlignment = Enum.TextXAlignment.Left
@@ -1220,13 +1220,10 @@ return function(env)
 		ImageLabel_3.BorderSizePixel = 0
 		ImageLabel_3.Size = UDim2.new(0, 45, 1, 0)
 		ImageLabel_3.Image =
-			Players:GetUserThumbnailAsync(ID, Enum.ThumbnailType.AvatarThumbnail, Enum.ThumbnailSize.Size420x420)
+			Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.AvatarThumbnail, Enum.ThumbnailSize.Size420x420)
 		scroll_3.CanvasSize = UDim2.new(0, 0, 0, listlayout.AbsoluteContentSize.Y)
 		scroll_3.CanvasPosition = Vector2.new(0, scroll_2.CanvasPosition.Y + infoFrame.AbsoluteSize.Y)
-		task.wait()
-		local user = game:HttpGet("https://users.roblox.com/v1/users/" .. ID)
-		local json = HttpService:JSONDecode(user)
-		local date = json["created"]:sub(1, 10)
+		local date = os.date("!%Y-%m-%d", os.time() - (player.AccountAge * 86400))
 		local splitDates = string.split(date, "-")
 		info2.Text =
 			string.gsub(info2.Text, "Loading...", splitDates[2] .. "/" .. splitDates[3] .. "/" .. splitDates[1])

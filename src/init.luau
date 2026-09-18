@@ -134,7 +134,7 @@ function hookCharEvents(plr, instant)
 			eventEditor.FireEvent("OnDied", plr.Name)
 
 			local killedBy = humanoid:FindFirstChild("creator")
-			if killedBy and killedBy.Value and killedBy.Value.Parent then
+			if killedBy and killedBy:IsA("ObjectValue") and killedBy.Value and killedBy.Value.Parent then
 				eventEditor.FireEvent("OnKilled", plr.Name, killedBy.Name)
 			end
 		end)
@@ -173,21 +173,31 @@ end)
 
 -- TextChatService integration
 if not isLegacyChat then
-	TextChatService.MessageReceived:Connect(function(message)
-		if message.TextSource and message.Status ~= Enum.TextChatMessageStatus.InvalidTextChannelPermissions then
-			local player = Players:GetPlayerByUserId(message.TextSource.UserId)
+	TextChatService.MessageReceived:Connect(function(textChatMessage)
+		if
+			textChatMessage.TextSource
+			and textChatMessage.Status ~= Enum.TextChatMessageStatus.InvalidTextChannelPermissions
+		then
+			local player = Players:GetPlayerByUserId(textChatMessage.TextSource.UserId)
 			if not player then
 				return
 			end
 
+			local message = textChatMessage.Text
+			pcall(function()
+				if textChatMessage.WasRewritten then
+					message = "(rephrased) " .. textChatMessage.RewrittenText
+				end
+			end)
+
 			if logsEnabled == true then
-				CreateLabel(player.Name, message.Text)
+				CreateLabel(player.Name, message)
 			end
 			if player.UserId == Players.LocalPlayer.UserId then
-				do_exec(message.Text, Players.LocalPlayer)
+				do_exec(message, Players.LocalPlayer)
 			end
-			eventEditor.FireEvent("OnChatted", player.Name, message.Text)
-			sendChatWebhook(player, message.Text)
+			eventEditor.FireEvent("OnChatted", player.Name, message)
+			sendChatWebhook(player, message)
 		end
 	end)
 end
