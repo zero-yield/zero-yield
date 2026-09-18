@@ -1046,11 +1046,13 @@ return function(env)
 							if lastBreakTime > cmdStartTime then
 								break
 							end
-							local success, err = pcall(function()
-								cmd.FUNC(args, speaker)
-							end)
+							local success, err = pcall(cmd.FUNC, args, speaker)
 							if not success and _G.ZY_DEBUG then
 								warn("Command Error:", cmdName, err)
+								notify("Command Error: " .. cmdName, "Check console")
+							end
+							if success and type(err) == "string" and not table.find(args, "nonotify") then
+								notify("Command: " .. cmdName, err)
 							end
 							if cmdDelay ~= 0 then
 								task.wait(cmdDelay)
