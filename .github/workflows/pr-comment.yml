@@ -1,0 +1,87 @@
+name: PR Comment
+
+on:
+  workflow_run:
+    workflows: ["PR Build"]
+    types:
+      - completed
+
+jobs:
+  pr_comment:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+      pull-requests: write
+      actions: read
+
+    steps:
+      - name: Upsert PR preview comment
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        with:
+          # Public-domain snippet adapted from
+          # https://github.com/oprypin/nightly.link/blob/master/.github/workflows/pr-comment.yml
+          script: |
+            async function upsertComment(owner, repo, issue_number, purpose, body) {
+              const { data: comments } = await github.rest.issues.listComments({
+                owner,
+                repo,
+                issue_number,
+              });
+
+              const marker = `<!-- bot: ${purpose} -->`;
+              body = marker + "\n" + body;
+
+              const existing = comments.filter((c) => c.body && c.body.includes(marker));
+              if (existing.length > 0) {
+                const last = existing[existing.length - 1];
+                core.info(`Updating comment ${last.id}`);
+                await github.rest.issues.updateComment({
+                  owner,
+                  repo,
+                  comment_id: last.id,
+                  body,
+                });
+              } else {
+                core.info(`Creating a comment in issue / PR #${issue_number}`);
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number,
+                  body,
+                });
+              }
+            }
+
+            const { owner, repo } = context.repo;
+            const run_id = ${{ github.event.workflow_run.id }};
+            const pull_requests = ${{ toJSON(github.event.workflow_run.pull_requests) }};
+            const head_sha = "${{ github.event.workflow_run.head_sha }}";
+            const sha_short = head_sha.slice(0, 7);
+
+            if (!pull_requests.length) {
+              return core.error("This workflow run doesn't match any pull requests!");
+            }
+
+            const artifacts = await github.paginate(
+              github.rest.actions.listWorkflowRunArtifacts,
+              { owner, repo, run_id }
+            );
+
+            if (!artifacts.length) {
+              return core.error(`No artifacts found for run ${run_id}`);
+            }
+
+            let body = `Download the PR builds for commit \`${sha_short}\`:\n`;
+            for (const art of artifacts) {
+              body += `\n* [${art.name}.zip](https://nightly.link/${owner}/${repo}/actions/artifacts/${art.id}.zip)`;
+            }
+            body += `\n\n[View run](https://github.com/${owner}/${repo}/actions/runs/${run_id})`;
+
+            core.info("Review thread message body:");
+            core.info(body);
+
+            for (const pr of pull_requests) {
+              await upsertComment(owner, repo, pr.number, "nightly-link", body);
+            }
