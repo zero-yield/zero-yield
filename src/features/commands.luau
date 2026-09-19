@@ -7384,9 +7384,8 @@ end
 	end)
 
 	addcmd("debug", {}, function(args, speaker)
-		local opt = parseBoolean(args[1], true)
-		_G.ZY_DEBUG = opt
-		notify("debug", tostring(opt), 1)
+		_G.ZY_DEBUG = parseBoolean(args[1], true)
+		return _G.ZY_DEBUG and "Enabled" or "Disabled"
 	end)
 
 	return env

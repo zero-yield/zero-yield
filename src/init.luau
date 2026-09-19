@@ -117,7 +117,7 @@ function hookCharEvents(plr, instant)
 		end
 
 		local humanoid = char:WaitForChild("Humanoid", 10)
-		if not humanoid then
+		if not humanoid or not humanoid:IsA("Humanoid") then
 			return
 		end
 
@@ -185,8 +185,13 @@ if not isLegacyChat then
 
 			local message = textChatMessage.Text
 			pcall(function()
-				if textChatMessage.WasRewritten then
+				if textChatMessage.WasRewritten == true then
 					message = "(rephrased) " .. textChatMessage.RewrittenText
+				end
+			end)
+			pcall(function()
+				if type(textChatMessage.OriginalText) == "string" then
+					message = textChatMessage.OriginalText
 				end
 			end)
 
