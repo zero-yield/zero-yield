@@ -8,7 +8,7 @@ on:
 
 jobs:
   pr_comment:
-    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.actor.login != 'renovate[bot]' && !startsWith(github.event.workflow_run.head_branch, 'renovate/')
     runs-on: ubuntu-latest
 
     permissions:
