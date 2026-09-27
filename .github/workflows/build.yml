@@ -46,7 +46,7 @@ jobs:
           echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Setup darklua
-        uses: jacklebeignet/setup-darklua@44279c85de96ac5863eb5945861e37228b11dfd4 # v1
+        uses: jacklebeignet/setup-darklua@8f3cf03b63c4aa78fc455e1ce380cf0d43d4a1a2 # v1
         with:
           version: latest
 
