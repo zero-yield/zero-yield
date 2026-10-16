@@ -69,6 +69,7 @@ return function(env)
 		["zeroyield/assets/pin.png"] = "rbxassetid://6234691350",
 		["zeroyield/assets/reference.png"] = "rbxassetid://3523243755",
 		["zeroyield/assets/settings.png"] = "rbxassetid://1204397029",
+		["zeroyield/assets/scrollbar.png"] = "rbxassetid://75024581433929",
 	}
 
 	function getcustomasset(asset)
@@ -92,7 +93,7 @@ return function(env)
 				end
 			end
 			for path in zyassets do
-				if not isfile(path) then
+				if not isfile(path) and path ~= "zeroyield/assets/scrollbar.png" then
 					writefile(path, game:HttpGet((path:gsub("zeroyield/", assets))))
 				end
 			end

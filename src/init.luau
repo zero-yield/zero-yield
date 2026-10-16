@@ -189,11 +189,6 @@ if not isLegacyChat then
 					message = "(rephrased) " .. textChatMessage.RewrittenText
 				end
 			end)
-			pcall(function()
-				if type(textChatMessage.OriginalText) == "string" then
-					message = textChatMessage.OriginalText
-				end
-			end)
 
 			if logsEnabled == true then
 				CreateLabel(player.Name, message)
