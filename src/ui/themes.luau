@@ -45,8 +45,13 @@ return function(env)
 		cache_currentText2 = currentText2
 		cache_currentScroll = currentScroll
 		if not colorpickerOpen then
+			local objects = getobjects("rbxassetid://4908465318")
+			if not objects or not objects[1] then
+				notify("Theme", "Your executor does not support the color picker (missing getobjects)")
+				return
+			end
 			colorpickerOpen = true
-			picker = game:GetObjects("rbxassetid://4908465318")[1]
+			picker = objects[1]
 			picker.Name = randomString()
 			picker.Parent = ScaledHolder
 

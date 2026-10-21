@@ -1,15 +1,37 @@
 return function(env)
+	local function getService(name)
+		local success, service = pcall(function()
+			return game:GetService(name)
+		end)
+		if not success or not service then
+			return nil
+		end
+
+		local cloned, clone = pcall(cloneref, service)
+		if cloned and clone then
+			return clone
+		end
+		return service
+	end
+
+	local function cloneRef(value)
+		if value == nil then
+			return nil
+		end
+		local success, clone = pcall(cloneref, value)
+		if success and clone then
+			return clone
+		end
+		return value
+	end
+
 	Services = setmetatable({}, {
 		__index = function(self, name)
-			local success, cache = pcall(function()
-				return cloneref(game:GetService(name))
-			end)
-			if success then
-				rawset(self, name, cache)
-				return cache
-			else
-				error("Invalid Service: " .. tostring(name))
+			local service = getService(name)
+			if service ~= nil then
+				rawset(self, name, service)
 			end
+			return service
 		end,
 	})
 
@@ -44,16 +66,54 @@ return function(env)
 	VoiceChatService = Services.VoiceChatService
 	SocialService = Services.SocialService
 
-	PlayerGui = cloneref(Players.LocalPlayer:FindFirstChildWhichIsA("PlayerGui"))
-	COREGUI = Services.CoreGui or PlayerGui
-	ZYMouse = cloneref(Players.LocalPlayer:GetMouse())
+	local localPlayer = Players and Players.LocalPlayer
+	local waited = 0
+	while not localPlayer and waited < 10 do
+		task.wait(0.1)
+		waited = waited + 0.1
+		localPlayer = Players and Players.LocalPlayer
+	end
+
+	local playerGui
+	if localPlayer then
+		playerGui = localPlayer:FindFirstChildWhichIsA("PlayerGui") or localPlayer:WaitForChild("PlayerGui", 10)
+	end
+	PlayerGui = cloneRef(playerGui)
+
+	local hiddenGui
+	if gethui then
+		local success, result = pcall(gethui)
+		if success and typeof(result) == "Instance" then
+			hiddenGui = result
+		end
+	end
+	COREGUI = getService("CoreGui") or hiddenGui or PlayerGui
+
+	local mouse
+	if localPlayer then
+		local success, result = pcall(function()
+			return localPlayer:GetMouse()
+		end)
+		if success then
+			mouse = result
+		end
+	end
+	ZYMouse = cloneRef(mouse)
 	PlaceId, JobId = game.PlaceId, game.JobId
 	xpcall(function()
 		IsOnMobile = table.find({ Enum.Platform.Android, Enum.Platform.IOS }, UserInputService:GetPlatform())
 	end, function()
-		IsOnMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+		IsOnMobile = UserInputService and UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 	end)
-	isLegacyChat = TextChatService.ChatVersion == Enum.ChatVersion.LegacyChatService
+	isLegacyChat = true
+	if TextChatService then
+		local success, version = pcall(function()
+			return TextChatService.ChatVersion
+		end)
+		if success then
+			isLegacyChat = version == Enum.ChatVersion.LegacyChatService
+		end
+	end
 
 	-- xylex & europa
 	local zyassets = {
@@ -74,27 +134,30 @@ return function(env)
 
 	function getcustomasset(asset)
 		if waxgetcustomasset then
-			local success, result = pcall(function()
-				return waxgetcustomasset(asset)
-			end)
-			if success and result ~= nil and result ~= "" then
+			local success, result = pcall(waxgetcustomasset, asset)
+			if success and type(result) == "string" and result ~= "" then
 				return result
 			end
 		end
 		return zyassets[asset]
 	end
 
-	if makefolder and isfolder and writefile and isfile then
+	if writefile and isfile then
 		pcall(function() -- good executor trust
 			local assets = "https://raw.githubusercontent.com/infyiff/backup/refs/heads/main/"
-			for _, folder in { "zeroyield", "zeroyield/assets" } do
-				if not isfolder(folder) then
-					makefolder(folder)
+			if makefolder and isfolder then
+				for _, folder in { "zeroyield", "zeroyield/assets" } do
+					if not isfolder(folder) then
+						makefolder(folder)
+					end
 				end
 			end
 			for path in zyassets do
-				if not isfile(path) and path ~= "zeroyield/assets/scrollbar.png" then
-					writefile(path, game:HttpGet((path:gsub("zeroyield/", assets))))
+				if httpget and path ~= "zeroyield/assets/scrollbar.png" and not isfile(path) then
+					local content = httpget((path:gsub("zeroyield/", assets)))
+					if content then
+						writefile(path, content)
+					end
 				end
 			end
 			-- honestly just blame your phone if the assets appear in your gallery

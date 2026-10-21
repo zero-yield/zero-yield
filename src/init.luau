@@ -1,10 +1,16 @@
-if ZY_LOADED and not _G.ZY_DEBUG then
+local shared = _G
+pcall(function()
+	if type(getgenv) == "function" then
+		local executorEnv = getgenv()
+		if type(executorEnv) == "table" then
+			shared = executorEnv
+		end
+	end
+end)
+if (shared.ZY_LOADED or _G.ZY_LOADED) and not (shared.ZY_DEBUG or _G.ZY_DEBUG) then
 	return
 end
-
-pcall(function()
-	getgenv().ZY_LOADED = true
-end)
+shared.ZY_LOADED = true
 if not game:IsLoaded() then
 	game.Loaded:Wait()
 end
@@ -172,33 +178,35 @@ Players.PlayerAdded:Connect(function(plr)
 end)
 
 -- TextChatService integration
-if not isLegacyChat then
-	TextChatService.MessageReceived:Connect(function(textChatMessage)
-		if
-			textChatMessage.TextSource
-			and textChatMessage.Status ~= Enum.TextChatMessageStatus.InvalidTextChannelPermissions
-		then
-			local player = Players:GetPlayerByUserId(textChatMessage.TextSource.UserId)
-			if not player then
-				return
-			end
-
-			local message = textChatMessage.Text
-			pcall(function()
-				if textChatMessage.WasRewritten == true then
-					message = "(rephrased) " .. textChatMessage.RewrittenText
+if not isLegacyChat and TextChatService then
+	pcall(function()
+		TextChatService.MessageReceived:Connect(function(textChatMessage)
+			if
+				textChatMessage.TextSource
+				and textChatMessage.Status ~= Enum.TextChatMessageStatus.InvalidTextChannelPermissions
+			then
+				local player = Players:GetPlayerByUserId(textChatMessage.TextSource.UserId)
+				if not player then
+					return
 				end
-			end)
 
-			if logsEnabled == true then
-				CreateLabel(player.Name, message)
+				local message = textChatMessage.Text
+				pcall(function()
+					if textChatMessage.WasRewritten == true then
+						message = "(rephrased) " .. textChatMessage.RewrittenText
+					end
+				end)
+
+				if logsEnabled == true then
+					CreateLabel(player.Name, message)
+				end
+				if player.UserId == Players.LocalPlayer.UserId then
+					do_exec(message, Players.LocalPlayer)
+				end
+				eventEditor.FireEvent("OnChatted", player.Name, message)
+				sendChatWebhook(player, message)
 			end
-			if player.UserId == Players.LocalPlayer.UserId then
-				do_exec(message, Players.LocalPlayer)
-			end
-			eventEditor.FireEvent("OnChatted", player.Name, message)
-			sendChatWebhook(player, message)
-		end
+		end)
 	end)
 end
 
@@ -248,22 +256,26 @@ if aliases and #aliases > 0 then
 end
 
 -- Mouse tooltip & capture
-ZYMouse.Move:Connect(checkTT)
+if ZYMouse then
+	ZYMouse.Move:Connect(checkTT)
+end
 
-CaptureService.CaptureBegan:Connect(function()
-	PARENT.Enabled = false
-end)
-
-CaptureService.CaptureEnded:Connect(function()
-	task.delay(0.1, function()
-		PARENT.Enabled = true
+if CaptureService and PARENT then
+	CaptureService.CaptureBegan:Connect(function()
+		PARENT.Enabled = false
 	end)
-end)
+
+	CaptureService.CaptureEnded:Connect(function()
+		task.delay(0.1, function()
+			PARENT.Enabled = true
+		end)
+	end)
+end
 
 -- Version check & announcement
 task.spawn(function()
 	local success, latestVersionInfo = pcall(function()
-		local versionJson = game:HttpGet("https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/master/version")
+		local versionJson = httpget("https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/master/version")
 		return HttpService:JSONDecode(versionJson)
 	end)
 

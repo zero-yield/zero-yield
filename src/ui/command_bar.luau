@@ -1,8 +1,10 @@
 return function(env)
 	function CamViewport()
-		if workspace.CurrentCamera then
-			return workspace.CurrentCamera.ViewportSize.X
+		local camera = workspace.CurrentCamera
+		if camera then
+			return camera.ViewportSize.X
 		end
+		return 0
 	end
 
 	function UpdateToViewport()
@@ -25,12 +27,17 @@ return function(env)
 			)
 		end
 	end
-	CameraChanged = workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(UpdateToViewport)
+	local initialCamera = workspace.CurrentCamera
+	CameraChanged = initialCamera and initialCamera:GetPropertyChangedSignal("ViewportSize"):Connect(UpdateToViewport)
 
 	function updateCamera(child, parent)
 		if parent ~= workspace then
-			CamMoved:Disconnect()
-			CameraChanged:Disconnect()
+			if CamMoved then
+				CamMoved:Disconnect()
+			end
+			if CameraChanged then
+				CameraChanged:Disconnect()
+			end
 			repeat
 				task.wait()
 			until workspace.CurrentCamera
@@ -38,7 +45,10 @@ return function(env)
 			CamMoved = workspace.CurrentCamera.AncestryChanged:Connect(updateCamera)
 		end
 	end
-	CamMoved = workspace.CurrentCamera.AncestryChanged:Connect(updateCamera)
+
+	if workspace.CurrentCamera then
+		CamMoved = workspace.CurrentCamera.AncestryChanged:Connect(updateCamera)
+	end
 
 	function dragMain(dragpoint, gui)
 		task.spawn(function()
@@ -923,8 +933,16 @@ return function(env)
 	IndexContents("", true)
 
 	function checkTT()
+		if not COREGUI or not ZYMouse then
+			return
+		end
 		local t
-		local guisAtPosition = COREGUI:GetGuiObjectsAtPosition(ZYMouse.X, ZYMouse.Y)
+		local success, guisAtPosition = pcall(function()
+			return COREGUI:GetGuiObjectsAtPosition(ZYMouse.X, ZYMouse.Y)
+		end)
+		if not success or not guisAtPosition then
+			return
+		end
 
 		for _, gui in pairs(guisAtPosition) do
 			if gui.Parent == CMDsF then
