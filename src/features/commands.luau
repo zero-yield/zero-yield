@@ -1,4 +1,13 @@
 return function(env)
+	local function loadScript(url, name, binary)
+		notify("Loading", "Hold on a sec")
+		local success, err = loadremote(url, binary)
+		if not success then
+			notify((name or "Script") .. " Error", "Unable to load script: " .. tostring(err))
+		end
+		return success
+	end
+
 	addcmd("addalias", {}, function(args, speaker)
 		if #args < 2 then
 			return
@@ -52,7 +61,7 @@ return function(env)
 			notify("Discord Invite", "discord.gg/sc5tfyEUqD")
 		end
 		if httprequest then
-			httprequest({
+			pcall(httprequest, {
 				Url = "http://127.0.0.1:6463/rpc?v=1",
 				Method = "POST",
 				Headers = {
@@ -70,29 +79,28 @@ return function(env)
 
 	addcmd("unc", { "unctest" }, function(args, speaker)
 		notify("Loading", "Hold on a sec. Please check the console for results.")
-
-		loadstring(
-			game:HttpGet(
-				"https://raw.githubusercontent.com/unified-naming-convention/NamingStandard/refs/heads/main/UNCCheckEnv.lua"
-			)
-		)()
+		loadScript(
+			"https://raw.githubusercontent.com/unified-naming-convention/NamingStandard/refs/heads/main/UNCCheckEnv.lua",
+			"UNC"
+		)
 	end)
 
 	addcmd("sunc", { "sunctest" }, function(args, speaker)
 		notify("Loading", "Hold on a sec. Please check the console for results.")
 
-		if not getgenv then
+		local environment = getgenv and getgenv() or _G
+		if type(environment) ~= "table" then
 			notify("Incompatible Exploit", "Your executor cannot run the sUNC test suite. (missing getgenv)")
 			return
 		end
 
-		getgenv().sUNCDebug = {
+		environment.sUNCDebug = {
 			printcheckpoints = false,
 			delaybetweentests = 0,
 			printtesttimetaken = false,
 		}
 
-		loadstring(game:HttpGet("https://script.sunc.su/"))()
+		loadScript("https://script.sunc.su/", "sUNC")
 	end)
 
 	addcmd("keepzy", {}, function(args, speaker)
@@ -414,7 +422,12 @@ return function(env)
 				FRAME:Destroy()
 				canOpenServerinfo = true
 			end)
-			local Asset = MarketplaceService:GetProductInfo(PlaceId)
+			local assetSuccess, Asset = pcall(function()
+				return MarketplaceService:GetProductInfo(PlaceId)
+			end)
+			if not assetSuccess or not Asset then
+				Asset = { Name = "Unknown" }
+			end
 			SINFOGUI.name.Text = "Place Name: " .. Asset.Name
 			SINFOGUI.playerid.Text = "Player ID: " .. speaker.UserId
 			SINFOGUI.maxplayers.Text = Players.MaxPlayers .. " Players Max"
@@ -520,11 +533,23 @@ end
 	addcmd("inviteprompt", {}, function(args, speaker)
 		local plrs = getPlayer(args[1], speaker)
 		if #plrs > 0 then
-			ExperienceService:LaunchExperience({
-				placeId = PlaceId,
-				gameInstanceId = JobId,
-				referredByPlayerId = plr[1].UserId,
-			})
+			local target = Players[plrs[1]] or speaker
+			if not ExperienceService then
+				return notify(
+					"Incompatible Exploit",
+					"Your executor cannot use this command (missing ExperienceService)"
+				)
+			end
+			local success = pcall(function()
+				ExperienceService:LaunchExperience({
+					placeId = PlaceId,
+					gameInstanceId = JobId,
+					referredByPlayerId = target.UserId,
+				})
+			end)
+			if not success then
+				notify("Invite Prompt", "Your executor cannot use this command")
+			end
 		end
 	end)
 
@@ -538,12 +563,21 @@ end
 	addcmd("serverhop", { "shop" }, function(args, speaker)
 		-- thanks to Amity for fixing
 		local servers = {}
-		local req = game:HttpGet(
+		local success, req = pcall(
+			httpget,
 			"https://games.roblox.com/v1/games/"
 				.. PlaceId
 				.. "/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true"
 		)
-		local body = HttpService:JSONDecode(req)
+		if not success or type(req) ~= "string" then
+			return notify("Serverhop", "Your executor cannot make HTTP requests.")
+		end
+		local decoded, body = pcall(function()
+			return HttpService:JSONDecode(req)
+		end)
+		if not decoded then
+			return notify("Serverhop", "Couldn't read the server list.")
+		end
 
 		if body and body.data then
 			for i, v in next, body.data do
@@ -1450,6 +1484,9 @@ end
 
 	local invisGUIS = {}
 	addcmd("showguis", {}, function(args, speaker)
+		if not PlayerGui then
+			return notify("Incompatible Exploit", "Your executor cannot access PlayerGui")
+		end
 		for i, v in pairs(PlayerGui:GetDescendants()) do
 			if (v:IsA("Frame") or v:IsA("ImageLabel") or v:IsA("ScrollingFrame")) and not v.Visible then
 				v.Visible = true
@@ -1469,6 +1506,9 @@ end
 
 	local hiddenGUIS = {}
 	addcmd("hideguis", {}, function(args, speaker)
+		if not PlayerGui then
+			return notify("Incompatible Exploit", "Your executor cannot access PlayerGui")
+		end
 		for i, v in pairs(PlayerGui:GetDescendants()) do
 			if (v:IsA("Frame") or v:IsA("ImageLabel") or v:IsA("ScrollingFrame")) and v.Visible then
 				v.Visible = false
@@ -1544,11 +1584,27 @@ end
 	end)
 
 	addcmd("rec", { "record" }, function(args, speaker)
-		return COREGUI:ToggleRecording()
+		if not COREGUI then
+			return notify("Incompatible Exploit", "Your executor cannot access CoreGui")
+		end
+		local success, err = pcall(function()
+			return COREGUI:ToggleRecording()
+		end)
+		if not success then
+			notify("Record", "Your executor cannot use this command: " .. tostring(err))
+		end
 	end)
 
 	addcmd("screenshot", { "scrnshot" }, function(args, speaker)
-		return COREGUI:TakeScreenshot()
+		if not COREGUI then
+			return notify("Incompatible Exploit", "Your executor cannot access CoreGui")
+		end
+		local success, err = pcall(function()
+			return COREGUI:TakeScreenshot()
+		end)
+		if not success then
+			notify("Screenshot", "Your executor cannot use this command: " .. tostring(err))
+		end
 	end)
 
 	addcmd("togglefs", { "togglefullscreen" }, function(args, speaker)
@@ -1565,8 +1621,12 @@ end
 	addcmd("savegame", { "saveplace" }, function(args, speaker)
 		if saveinstance then
 			notify("Loading", "Downloading game. This will take a while")
-			saveinstance()
-			notify("Game Saved", "Saved place to the workspace folder within your exploit folder.")
+			local success, err = pcall(saveinstance)
+			if success then
+				notify("Game Saved", "Saved place to the workspace folder within your exploit folder.")
+			else
+				notify("Save Game", "Unable to save the game: " .. tostring(err))
+			end
 		else
 			notify("Incompatible Exploit", "Your exploit does not support this command (missing saveinstance)")
 		end
@@ -1577,15 +1637,24 @@ end
 	end)
 
 	addcmd("antigameplaypaused", {}, function(args, speaker)
+		local success, robloxGui = pcall(function()
+			return COREGUI and COREGUI.RobloxGui
+		end)
+		if not success or not robloxGui then
+			return notify("Incompatible Exploit", "Your executor cannot access the Roblox GUI")
+		end
 		pcall(function()
 			networkPaused:Disconnect()
 		end)
-		networkPaused = COREGUI.RobloxGui.ChildAdded:Connect(function(obj)
+		networkPaused = robloxGui.ChildAdded:Connect(function(obj)
 			if obj.Name == "CoreScripts/NetworkPause" then
 				obj:Destroy()
 			end
 		end)
-		COREGUI.RobloxGui["CoreScripts/NetworkPause"]:Destroy()
+		local pause = robloxGui:FindFirstChild("CoreScripts/NetworkPause")
+		if pause then
+			pause:Destroy()
+		end
 	end)
 
 	addcmd("unantigameplaypaused", {}, function(args, speaker)
@@ -1593,8 +1662,11 @@ end
 	end)
 
 	addcmd("clientantikick", { "antikick" }, function(args, speaker)
-		if not hookmetamethod then
-			return notify("Incompatible Exploit", "Your exploit does not support this command (missing hookmetamethod)")
+		if not hookmetamethod or not hookfunction then
+			return notify(
+				"Incompatible Exploit",
+				"Your exploit does not support this command (missing hookmetamethod/hookfunction)"
+			)
 		end
 		local LocalPlayer = Players.LocalPlayer
 		local oldNamecall
@@ -1624,8 +1696,11 @@ end
 
 	allow_rj = true
 	addcmd("clientantiteleport", { "antiteleport" }, function(args, speaker)
-		if not hookmetamethod then
-			return notify("Incompatible Exploit", "Your exploit does not support this command (missing hookmetamethod)")
+		if not hookmetamethod or not hookfunction then
+			return notify(
+				"Incompatible Exploit",
+				"Your exploit does not support this command (missing hookmetamethod/hookfunction)"
+			)
 		end
 
 		local oldTp
@@ -1673,7 +1748,7 @@ end
 			game,
 			"__namecall",
 			newcclosure(function(...)
-				local nmc = getnamecallmethod()
+				local nmc = getnamecallmethod and getnamecallmethod() or ""
 				if
 					select(1, ...) == TeleportService and nmc == "teleport"
 					or nmc == "Teleport"
@@ -1702,7 +1777,16 @@ end
 	end)
 
 	addcmd("volume", { "vol" }, function(args, speaker)
-		UserSettings():GetService("UserGameSettings").MasterVolume = args[1] / 10
+		local volume = tonumber(args[1])
+		if not volume then
+			return notify("Volume", "Provide a number between 0 and 10")
+		end
+		local success = pcall(function()
+			UserSettings():GetService("UserGameSettings").MasterVolume = volume / 10
+		end)
+		if not success then
+			notify("Volume", "Your executor cannot change the game volume")
+		end
 	end)
 
 	addcmd("antilag", { "boostfps", "lowgraphics" }, function(args, speaker)
@@ -1714,7 +1798,9 @@ end
 		Lighting.GlobalShadows = false
 		Lighting.FogEnd = 9e9
 		Lighting.FogStart = 9e9
-		settings().Rendering.QualityLevel = 1
+		pcall(function()
+			settings().Rendering.QualityLevel = 1
+		end)
 		for _, v in pairs(game:GetDescendants()) do
 			if v:IsA("BasePart") then
 				v.CastShadow = false
@@ -1773,7 +1859,7 @@ end
 		end
 
 		if setfpscap and type(setfpscap) == "function" then
-			setfpscap(fpsCap)
+			pcall(setfpscap, fpsCap)
 		else
 			fpscaploop = task.spawn(function()
 				local timer = os.clock()
@@ -2439,14 +2525,26 @@ end
 				"Your exploit does not support this command (missing setconstant or getconstants or getgc)"
 			)
 		end
+		if type(getfenv) ~= "function" then
+			return notify("Incompatible Exploit", "Your exploit does not support this command (missing getfenv)")
+		end
 		local pop = speaker.PlayerScripts.PlayerModule.CameraModule.ZoomController.Popper
-		for _, v in pairs(getgc()) do
-			if type(v) == "function" and getfenv(v).script == pop then
-				for i, v1 in pairs(gc(v)) do
-					if tonumber(v1) == 0.25 then
-						sc(v, i, 0)
-					elseif tonumber(v1) == 0 then
-						sc(v, i, 0.25)
+		local success, gcObjects = pcall(getgc)
+		if not success or type(gcObjects) ~= "table" then
+			return notify("Incompatible Exploit", "Your exploit cannot read the garbage collector")
+		end
+		for _, v in pairs(gcObjects) do
+			if type(v) == "function" then
+				local success, script = pcall(function()
+					return getfenv(v).script
+				end)
+				if success and script == pop then
+					for i, v1 in pairs(gc(v)) do
+						if tonumber(v1) == 0.25 then
+							sc(v, i, 0)
+						elseif tonumber(v1) == 0 then
+							sc(v, i, 0.25)
+						end
 					end
 				end
 			end
@@ -2585,7 +2683,7 @@ end
 	end)
 
 	addcmd("f3x", { "fex" }, function(args, speaker)
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/refs/heads/main/f3x.lua"))()
+		loadScript("https://raw.githubusercontent.com/infyiff/backup/refs/heads/main/f3x.lua", "F3X")
 	end)
 
 	addcmd("partpath", { "partname" }, function(args, speaker)
@@ -2595,13 +2693,16 @@ end
 	local antiAfkCon = nil
 	addcmd("antiafk", { "antiidle" }, function(args, speaker)
 		if getconnections then
-			for _, c in getconnections(speaker.Idled) do
-				pcall(function()
-					c:Disable()
-				end) -- supposed to "pause" it
-				pcall(function()
-					c:Disconnect()
-				end) -- supposed to disconnect it
+			local success, connections = pcall(getconnections, speaker.Idled)
+			if success and type(connections) == "table" then
+				for _, c in connections do
+					pcall(function()
+						c:Disable()
+					end) -- supposed to "pause" it
+					pcall(function()
+						c:Disconnect()
+					end) -- supposed to disconnect it
+				end
 			end
 		end
 
@@ -2623,31 +2724,59 @@ end
 	addcmd("datalimit", {}, function(args, speaker)
 		local kbps = tonumber(args[1])
 		if kbps then
-			Services.NetworkClient:SetOutgoingKBPSLimit(kbps)
+			local success = pcall(function()
+				Services.NetworkClient:SetOutgoingKBPSLimit(kbps)
+			end)
+			if not success then
+				notify("Data Limit", "Your executor cannot change network settings")
+			end
 		end
 	end)
 
 	addcmd("replicationlag", { "backtrack" }, function(args, speaker)
 		if tonumber(args[1]) then
-			settings():GetService("NetworkSettings").IncomingReplicationLag = args[1]
+			local success = pcall(function()
+				settings():GetService("NetworkSettings").IncomingReplicationLag = args[1]
+			end)
+			if not success then
+				notify("Replication Lag", "Your executor cannot change network settings")
+			end
 		end
 	end)
 
 	addcmd("noprompts", { "nopurchaseprompts" }, function(args, speaker)
-		COREGUI.PurchasePromptApp.Enabled = false
+		local success = pcall(function()
+			COREGUI.PurchasePromptApp.Enabled = false
+		end)
+		if not success then
+			notify("Prompts", "Your executor cannot access the purchase prompt")
+		end
 	end)
 
 	addcmd("showprompts", { "showpurchaseprompts" }, function(args, speaker)
-		COREGUI.PurchasePromptApp.Enabled = true
+		local success = pcall(function()
+			COREGUI.PurchasePromptApp.Enabled = true
+		end)
+		if not success then
+			notify("Prompts", "Your executor cannot access the purchase prompt")
+		end
 	end)
 
 	promptNewRig = function(speaker, rig)
+		if not AvatarEditorService then
+			return notify("Incompatible Exploit", "Your executor cannot use this command (missing AvatarEditorService)")
+		end
 		local humanoid = speaker.Character:FindFirstChildWhichIsA("Humanoid")
 		if humanoid then
-			AvatarEditorService:PromptSaveAvatar(humanoid.HumanoidDescription, Enum.HumanoidRigType[rig])
-			local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
-			if result == Enum.AvatarPromptResult.Success then
-				execCmd("reset")
+			local success = pcall(function()
+				AvatarEditorService:PromptSaveAvatar(humanoid.HumanoidDescription, Enum.HumanoidRigType[rig])
+				local result = AvatarEditorService.PromptSaveAvatarCompleted:Wait()
+				if result == Enum.AvatarPromptResult.Success then
+					execCmd("reset")
+				end
+			end)
+			if not success then
+				notify("Avatar Editor", "Your executor cannot use this command")
 			end
 		end
 	end
@@ -2661,7 +2790,7 @@ end
 	end)
 
 	addcmd("wallwalk", { "walkonwalls" }, function(args, speaker)
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/wallwalker.lua"))()
+		loadScript("https://raw.githubusercontent.com/infyiff/backup/main/wallwalker.lua", "Wall Walk")
 	end)
 
 	addcmd("age", {}, function(args, speaker)
@@ -2806,7 +2935,10 @@ end
 
 	addcmd("2022materials", { "use2022materials" }, function(args, speaker)
 		if sethidden then
-			sethidden(MaterialService, "Use2022Materials", true)
+			local success = pcall(sethidden, MaterialService, "Use2022Materials", true)
+			if not success then
+				notify("Incompatible Exploit", "Your exploit could not change this property")
+			end
 		else
 			notify("Incompatible Exploit", "Your exploit does not support this command (missing sethiddenproperty)")
 		end
@@ -2814,7 +2946,10 @@ end
 
 	addcmd("un2022materials", { "unuse2022materials" }, function(args, speaker)
 		if sethidden then
-			sethidden(MaterialService, "Use2022Materials", false)
+			local success = pcall(sethidden, MaterialService, "Use2022Materials", false)
+			if not success then
+				notify("Incompatible Exploit", "Your exploit could not change this property")
+			end
 		else
 			notify("Incompatible Exploit", "Your exploit does not support this command (missing sethiddenproperty)")
 		end
@@ -3955,8 +4090,8 @@ end
 		if root and firetouchinterest then
 			for _, v in ipairs(workspace:GetDescendants()) do
 				if v:IsA("SpawnLocation") and v.BrickColor == team.TeamColor and v.AllowTeamChangeOnTouch == true then
-					firetouchinterest(v, root, 0)
-					firetouchinterest(v, root, 1)
+					pcall(firetouchinterest, v, root, 0)
+					pcall(firetouchinterest, v, root, 1)
 					break
 				end
 			end
@@ -4035,7 +4170,10 @@ end
 	end)
 
 	local function anim2track(asset_id)
-		local objs = game:GetObjects(asset_id)
+		local objs = getobjects and getobjects(asset_id)
+		if not objs then
+			return asset_id
+		end
 		for i = 1, #objs do
 			if objs[i]:IsA("Animation") then
 				return objs[i].AnimationId
@@ -4525,21 +4663,24 @@ end
 	addcmd("oldconsole", {}, function(args, speaker)
 		-- Thanks wally!!
 		notify("Loading", "Hold on a sec")
-		local _, str = pcall(function()
-			return game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/console.lua", true)
-		end)
-
-		local s, e = loadstring(str)
-		if typeof(s) ~= "function" then
-			return
+		local success, str = pcall(httpget, "https://raw.githubusercontent.com/infyiff/backup/main/console.lua", true)
+		if not success or type(str) ~= "string" then
+			return notify("Console", "Your executor cannot download the console.")
 		end
 
-		local success, message = pcall(s)
-		if not success then
+		local s, e = loadcode(str, "console.lua")
+		if typeof(s) ~= "function" then
+			return notify("Console", "Unable to load the console: " .. tostring(e))
+		end
+
+		local ran, message = pcall(s)
+		if not ran then
 			if printconsole then
-				printconsole(message)
+				pcall(printconsole, message)
 			elseif printoutput then
-				printoutput(message)
+				pcall(printoutput, message)
+			else
+				print(message)
 			end
 		end
 		task.wait(1)
@@ -4547,31 +4688,26 @@ end
 	end)
 
 	addcmd("explorer", { "dex" }, function(args, speaker)
-		notify("Loading", "Hold on a sec")
-		loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()
+		loadScript("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua", "Explorer")
 	end)
 
 	addcmd("moondex", { "mdex" }, function(args, speaker)
-		notify("Loading", "Hold on a sec")
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+		loadScript("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua", "MoonDex")
 	end)
 
 	addcmd("remotespy", { "rspy", "cobalt", "cspy" }, function(args, speaker)
-		notify("Loading", "Hold on a sec")
 		-- Full credit to notpoiu, creator of Cobalt
-		loadstring(game:HttpGet("https://gitlab.com/upio/cobalt/-/releases/permalink/latest/downloads/Cobalt.luau"))()
+		loadScript("https://gitlab.com/upio/cobalt/-/releases/permalink/latest/downloads/Cobalt.luau", "Remote Spy")
 	end)
 
 	addcmd("simplespy", { "sspy" }, function(args, speaker)
-		notify("Loading", "Hold on a sec")
 		-- Full credit to exx, creator of SimpleSpy
 		-- also thanks to Amity for fixing
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/SimpleSpyV3/main.lua"))()
+		loadScript("https://raw.githubusercontent.com/infyiff/backup/main/SimpleSpyV3/main.lua", "SimpleSpy")
 	end)
 
 	addcmd("audiologger", { "alogger" }, function(args, speaker)
-		notify("Loading", "Hold on a sec")
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/audiologger.lua", true))()
+		loadScript("https://raw.githubusercontent.com/infyiff/backup/main/audiologger.lua", "Audio Logger", true)
 	end)
 
 	local loopgoto = nil
@@ -4718,29 +4854,74 @@ end
 
 	addcmd("bubblechat", {}, function(args, speaker)
 		if isLegacyChat then
-			ChatService.BubbleChatEnabled = true
-		else
-			TextChatService.BubbleChatConfiguration.Enabled = true
+			if not ChatService then
+				return notify("Incompatible Exploit", "Your executor cannot access the chat service")
+			end
+			local success = pcall(function()
+				ChatService.BubbleChatEnabled = true
+			end)
+			if not success then
+				notify("Incompatible Exploit", "Your executor cannot access the chat service")
+			end
+		elseif TextChatService then
+			local success = pcall(function()
+				TextChatService.BubbleChatConfiguration.Enabled = true
+			end)
+			if not success then
+				notify("Incompatible Exploit", "Your executor cannot access TextChatService")
+			end
 		end
 	end)
 
 	addcmd("unbubblechat", { "nobubblechat" }, function(args, speaker)
 		if isLegacyChat then
-			ChatService.BubbleChatEnabled = false
-		else
-			TextChatService.BubbleChatConfiguration.Enabled = false
+			if not ChatService then
+				return notify("Incompatible Exploit", "Your executor cannot access the chat service")
+			end
+			local success = pcall(function()
+				ChatService.BubbleChatEnabled = false
+			end)
+			if not success then
+				notify("Incompatible Exploit", "Your executor cannot access the chat service")
+			end
+		elseif TextChatService then
+			local success = pcall(function()
+				TextChatService.BubbleChatConfiguration.Enabled = false
+			end)
+			if not success then
+				notify("Incompatible Exploit", "Your executor cannot access TextChatService")
+			end
 		end
 	end)
 
 	addcmd("chatwindow", {}, function(args, speaker)
-		TextChatService.ChatWindowConfiguration.Enabled = true
+		if not TextChatService then
+			return notify("Incompatible Exploit", "Your executor cannot access TextChatService")
+		end
+		local success = pcall(function()
+			TextChatService.ChatWindowConfiguration.Enabled = true
+		end)
+		if not success then
+			notify("Incompatible Exploit", "Your executor cannot access TextChatService")
+		end
 	end)
 
 	addcmd("unchatwindow", { "nochatwindow" }, function(args, speaker)
-		TextChatService.ChatWindowConfiguration.Enabled = false
+		if not TextChatService then
+			return notify("Incompatible Exploit", "Your executor cannot access TextChatService")
+		end
+		local success = pcall(function()
+			TextChatService.ChatWindowConfiguration.Enabled = false
+		end)
+		if not success then
+			notify("Incompatible Exploit", "Your executor cannot access TextChatService")
+		end
 	end)
 
 	addcmd("darkchat", {}, function(args, speaker)
+		if not TextChatService then
+			return notify("Incompatible Exploit", "Your executor cannot access TextChatService")
+		end
 		local BCC = TextChatService:FindFirstChildOfClass("BubbleChatConfiguration")
 		local CWC = TextChatService:FindFirstChildOfClass("ChatWindowConfiguration")
 		local CIBC = TextChatService:FindFirstChildOfClass("ChatInputBarConfiguration")
@@ -5058,13 +5239,13 @@ end
 						descendant:IsA("ClickDetector") and descendant.Name:lower() == name
 						or descendant.Parent.Name:lower() == name
 					then
-						fireclickdetector(descendant)
+						pcall(fireclickdetector, descendant)
 					end
 				end
 			else
 				for _, descendant in ipairs(workspace:GetDescendants()) do
 					if descendant:IsA("ClickDetector") then
-						fireclickdetector(descendant)
+						pcall(fireclickdetector, descendant)
 					end
 				end
 			end
@@ -5090,13 +5271,13 @@ end
 						descendant:IsA("ProximityPrompt") and descendant.Name == name
 						or descendant.Parent.Name == name
 					then
-						fireproximityprompt(descendant)
+						pcall(fireproximityprompt, descendant)
 					end
 				end
 			else
 				for _, descendant in ipairs(workspace:GetDescendants()) do
 					if descendant:IsA("ProximityPrompt") then
-						fireproximityprompt(descendant)
+						pcall(fireproximityprompt, descendant)
 					end
 				end
 			end
@@ -5111,7 +5292,7 @@ end
 			execCmd("uninstantproximityprompts")
 			task.wait(0.1)
 			PromptButtonHoldBegan = ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt)
-				fireproximityprompt(prompt)
+				pcall(fireproximityprompt, prompt)
 			end)
 		else
 			notify("Incompatible Exploit", "Your exploit does not support this command (missing fireproximityprompt)")
@@ -5331,7 +5512,7 @@ end
 				repeat
 					RunService.Heartbeat:Wait()
 				until Hats[i]
-				firetouchinterest(Hats[i].Handle, getRoot(Character), 0)
+				pcall(firetouchinterest, Hats[i].Handle, getRoot(Character), 0)
 				repeat
 					RunService.Heartbeat:Wait()
 				until Character:FindFirstChildOfClass("Accessory")
@@ -5501,7 +5682,7 @@ end
 			x = x.FindFirstAncestorWhichIsA(x, "Part")
 			if x then
 				return task.spawn(function()
-					firetouchinterest(x, Root, 1, task.wait() and firetouchinterest(x, Root, 0))
+					pcall(firetouchinterest, x, Root, 1, task.wait() and pcall(firetouchinterest, x, Root, 0))
 				end)
 			end
 			x.CFrame = Root.CFrame
@@ -6187,8 +6368,8 @@ end
 						and hum:GetState() ~= Enum.HumanoidStateType.Dead
 						and speaker:DistanceFromCharacter(root.Position) <= range
 					then
-						firetouchinterest(handle, root, 1)
-						firetouchinterest(handle, root, 0)
+						pcall(firetouchinterest, handle, root, 1)
+						pcall(firetouchinterest, handle, root, 0)
 					end
 				end
 			end
@@ -6430,9 +6611,9 @@ end
 			notify("Auto Clicker", "Press [backspace] and [=] at the same time to stop")
 			repeat
 				task.wait(clickDelay)
-				mouse1press()
+				pcall(mouse1press)
 				task.wait(releaseDelay)
-				mouse1release()
+				pcall(mouse1release)
 			until autoclicking == false
 		else
 			notify("Auto Clicker", "Your exploit doesn't have the ability to use the autoclick")
@@ -6559,11 +6740,15 @@ end
 	end)
 
 	addcmd("hitboxes", {}, function(args, speaker)
-		settings():GetService("RenderSettings").ShowBoundingBoxes = true
+		pcall(function()
+			settings():GetService("RenderSettings").ShowBoundingBoxes = true
+		end)
 	end)
 
 	addcmd("unhitboxes", {}, function(args, speaker)
-		settings():GetService("RenderSettings").ShowBoundingBoxes = false
+		pcall(function()
+			settings():GetService("RenderSettings").ShowBoundingBoxes = false
+		end)
 	end)
 
 	addcmd("stareat", { "stare" }, function(args, speaker)
@@ -6801,8 +6986,15 @@ end
 
 	addcmd("clearnilinstances", { "nonilinstances", "cni" }, function(args, speaker)
 		if getnilinstances then
-			for i, v in pairs(getnilinstances()) do
-				v:Destroy()
+			local success, instances = pcall(getnilinstances)
+			if success and type(instances) == "table" then
+				for i, v in pairs(instances) do
+					pcall(function()
+						v:Destroy()
+					end)
+				end
+			else
+				notify("Incompatible Exploit", "Your exploit cannot read nil instances")
 			end
 		else
 			notify("Incompatible Exploit", "Your exploit does not support this command (missing getnilinstances)")
@@ -7070,11 +7262,21 @@ end
 	end)
 
 	addcmd("muteallvoices", { "muteallvcs" }, function(args, speaker)
-		Services.VoiceChatInternal:SubscribePauseAll(true)
+		local success = pcall(function()
+			Services.VoiceChatInternal:SubscribePauseAll(true)
+		end)
+		if not success then
+			notify("Incompatible Exploit", "Your executor cannot access voice chat")
+		end
 	end)
 
 	addcmd("unmuteallvoices", { "unmuteallvcs" }, function(args, speaker)
-		Services.VoiceChatInternal:SubscribePauseAll(false)
+		local success = pcall(function()
+			Services.VoiceChatInternal:SubscribePauseAll(false)
+		end)
+		if not success then
+			notify("Incompatible Exploit", "Your executor cannot access voice chat")
+		end
 	end)
 
 	addcmd("mutevc", {}, function(args, speaker)
@@ -7082,7 +7284,9 @@ end
 			if Players[plr] == speaker then
 				continue
 			end
-			Services.VoiceChatInternal:SubscribePause(Players[plr].UserId, true)
+			pcall(function()
+				Services.VoiceChatInternal:SubscribePause(Players[plr].UserId, true)
+			end)
 		end
 	end)
 
@@ -7091,7 +7295,9 @@ end
 			if Players[plr] == speaker then
 				continue
 			end
-			Services.VoiceChatInternal:SubscribePause(Players[plr].UserId, false)
+			pcall(function()
+				Services.VoiceChatInternal:SubscribePause(Players[plr].UserId, false)
+			end)
 		end
 	end)
 
@@ -7324,13 +7530,13 @@ end
 			notify("Auto Key Press", "Press [backspace] and [=] at the same time to stop")
 			repeat
 				task.wait(clickDelay)
-				keypress(code)
+				pcall(keypress, code)
 				task.wait(releaseDelay)
-				keyrelease(code)
+				pcall(keyrelease, code)
 			until autoKeyPressing == false
 			if cancelAutoKeyPress then
 				cancelAutoKeyPress:Disconnect()
-				keyrelease(code)
+				pcall(keyrelease, code)
 			end
 		else
 			notify("Auto Key Press", "Your exploit doesn't have the ability to use auto key press")
@@ -7365,13 +7571,19 @@ end
 			return
 		end
 
-		for _, filePath in ipairs(listfiles("")) do
+		local success, files = pcall(listfiles, "")
+		if not success or type(files) ~= "table" then
+			return notify("Incompatible Exploit", "Your exploit could not list plugin files")
+		end
+
+		for _, filePath in ipairs(files) do
 			local fileName = filePath:match("([^/\\]+%.zy)$")
+			local folderSuccess, isDirectory = pcall(isfolder, fileName)
 
 			if
 				fileName
 				and fileName:lower() ~= "zy_fe.zy"
-				and not isfolder(fileName)
+				and not (folderSuccess and isDirectory)
 				and not table.find(PluginsTable, fileName)
 			then
 				addPlugin(fileName)

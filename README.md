@@ -59,7 +59,7 @@ pip install pre-commit
 pre-commit install
 ```
 
-After setup, `stylua` and `selene` run against the staged `.luau` files before each commit. The StyLua hook uses the system binary (via Rokit) so it gains full Luau support.
+After setup, `stylua` and `selene` run against the staged `.luau` files before each commit. The hooks use the Rokit-managed binaries and locate them automatically, even when `~/.rokit/bin` is not on your `PATH`.
 
 ### Manual checks
 

@@ -145,30 +145,75 @@ return function(env)
 
 	PARENT = nil
 	MAX_DISPLAY_ORDER = 1.7976931348623157e308
+	local function createScreenGui()
+		local main = Instance.new("ScreenGui")
+		main.Name = randomString()
+		main.ResetOnSpawn = false
+		main.DisplayOrder = MAX_DISPLAY_ORDER
+		return main
+	end
+
+	local hiddenGui
 	if gethui then
-		local Main = Instance.new("ScreenGui")
-		Main.Name = randomString()
-		Main.ResetOnSpawn = false
-		Main.DisplayOrder = MAX_DISPLAY_ORDER
-		Main.Parent = gethui()
-		PARENT = Main
-	elseif (not is_sirhurt_closure) and syn_protect_gui then
-		local Main = Instance.new("ScreenGui")
-		Main.Name = randomString()
-		Main.ResetOnSpawn = false
-		Main.DisplayOrder = MAX_DISPLAY_ORDER
-		syn_protect_gui(Main)
-		Main.Parent = COREGUI
-		PARENT = Main
-	elseif COREGUI:FindFirstChild("RobloxGui") then
-		PARENT = COREGUI.RobloxGui
-	else
-		local Main = Instance.new("ScreenGui")
-		Main.Name = randomString()
-		Main.ResetOnSpawn = false
-		Main.DisplayOrder = MAX_DISPLAY_ORDER
-		Main.Parent = COREGUI
-		PARENT = Main
+		local success, result = pcall(gethui)
+		if success and typeof(result) == "Instance" then
+			hiddenGui = result
+		end
+	end
+
+	if hiddenGui then
+		local main = createScreenGui()
+		local success = pcall(function()
+			main.Parent = hiddenGui
+		end)
+		if success and main.Parent then
+			PARENT = main
+		end
+	end
+
+	if not PARENT and syn_protect_gui and not is_sirhurt_closure then
+		local main = createScreenGui()
+		local success = pcall(syn_protect_gui, main)
+		if success then
+			success = pcall(function()
+				main.Parent = COREGUI or PlayerGui
+			end)
+			if success and main.Parent then
+				PARENT = main
+			end
+		end
+	end
+
+	if not PARENT and COREGUI then
+		local success, robloxGui = pcall(function()
+			return COREGUI:FindFirstChild("RobloxGui")
+		end)
+		if success and robloxGui then
+			PARENT = robloxGui
+		else
+			local main = createScreenGui()
+			success = pcall(function()
+				main.Parent = COREGUI
+			end)
+			if success and main.Parent then
+				PARENT = main
+			end
+		end
+	end
+
+	if not PARENT and PlayerGui then
+		local main = createScreenGui()
+		local success = pcall(function()
+			main.Parent = PlayerGui
+		end)
+		if success and main.Parent then
+			PARENT = main
+		end
+	end
+
+	if not PARENT then
+		-- Last resort: keep the script functional even if the executor hides every GUI parent.
+		PARENT = createScreenGui()
 	end
 
 	shade1 = {}

@@ -6,17 +6,16 @@ repos:
         stages: [commit-msg]
         additional_dependencies: ["@commitlint/config-conventional"]
 
-  - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v2.5.2
-    hooks:
-      - id: stylua-system
-        types: []
-        files: \.luau?$
-
   - repo: local
     hooks:
+      - id: stylua
+        name: StyLua
+        entry: python scripts/pre_commit_tool.py stylua
+        language: python
+        types: []
+        files: \.luau?$
       - id: selene
         name: selene
-        entry: selene
-        language: system
+        entry: python scripts/pre_commit_tool.py selene
+        language: python
         files: \.luau?$

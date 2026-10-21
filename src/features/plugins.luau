@@ -113,37 +113,53 @@ return function(env)
 		end)
 	end
 
-	ZYMouse.Button1Down:Connect(function()
-		for i, v in pairs(binds) do
-			if v.COMMAND == "clicktp" then
-				local input = v.KEY
-				if
-					(input == "RightClick" and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2))
-					or (input == "LeftClick" and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1))
-					or UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)])
-				then
-					if Players.LocalPlayer.Character then
-						clicktpFunc()
+	if ZYMouse then
+		ZYMouse.Button1Down:Connect(function()
+			for i, v in pairs(binds) do
+				if v.COMMAND == "clicktp" then
+					local input = v.KEY
+					if
+						(
+							input == "RightClick"
+							and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+						)
+						or (input == "LeftClick" and UserInputService:IsMouseButtonPressed(
+							Enum.UserInputType.MouseButton1
+						))
+						or UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)])
+					then
+						if Players.LocalPlayer.Character then
+							clicktpFunc()
+						end
+					end
+				elseif v.COMMAND == "clickdel" then
+					local input = v.KEY
+					if
+						(
+							input == "RightClick"
+							and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+						)
+						or (input == "LeftClick" and UserInputService:IsMouseButtonPressed(
+							Enum.UserInputType.MouseButton1
+						))
+						or UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)])
+					then
+						pcall(function()
+							ZYMouse.Target:Destroy()
+						end)
 					end
 				end
-			elseif v.COMMAND == "clickdel" then
-				local input = v.KEY
-				if
-					(input == "RightClick" and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2))
-					or (input == "LeftClick" and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1))
-					or UserInputService:IsKeyDown(Enum.KeyCode[input:sub(14)])
-				then
-					pcall(function()
-						ZYMouse.Target:Destroy()
-					end)
-				end
 			end
-		end
-	end)
+		end)
+	end
 
 	PluginsGUI = PluginEditor.background
 
 	function addPlugin(name)
+		if not readfile then
+			notify("Incompatible Exploit", "Your exploit is unable to use plugins (missing readfile)")
+			return
+		end
 		if name:lower() == "plugin file name" or name:lower() == "zy_fe.zy" or name == "zy_fe" then
 			notify("Plugin Error", "Please enter a valid plugin")
 		else
@@ -237,6 +253,9 @@ return function(env)
 		local plugin
 
 		function CatchedPluginLoad()
+			if not loadfile then
+				error("missing loadfile", 0)
+			end
 			plugin = loadfile(val)()
 		end
 
@@ -329,7 +348,7 @@ return function(env)
 	end)
 
 	Plugins.MouseButton1Click:Connect(function()
-		if writefileExploit() then
+		if writefileExploit() and readfile then
 			PluginsFrame:TweenPosition(UDim2.new(0, 0, 0, 0), "InOut", "Quart", 0.5, true, nil)
 			task.wait(0.5)
 			SettingsHolder.Visible = false
@@ -348,7 +367,28 @@ return function(env)
 		if KeepInfYield and not TeleportCheck and queueteleport then
 			TeleportCheck = true
 			queueteleport(
-				"loadstring(game:HttpGet('https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/builds/source.min.luau'))()"
+				[[local url = "https://cdn.jsdelivr.net/gh/zero-yield/zero-yield@refs/heads/builds/source.min.luau"
+local source
+local ok, result = pcall(function()
+	return game:HttpGet(url)
+end)
+if ok and type(result) == "string" then
+	source = result
+else
+	local requestFunc = request or http_request or (syn and syn.request)
+	if requestFunc then
+		local success, response = pcall(requestFunc, { Url = url, Method = "GET" })
+		if success and type(response) == "table" then
+			source = response.Body
+		end
+	end
+end
+if type(source) == "string" and type(loadstring) == "function" then
+	local func = loadstring(source)
+	if func then
+		pcall(func)
+	end
+end]]
 			)
 		end
 	end)

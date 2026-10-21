@@ -168,19 +168,31 @@ return function(env)
 
 	function toClipboard(txt)
 		if everyClipboard then
-			everyClipboard(tostring(txt)) -- some executor errored without tostring btw so dont call me out for this
-			notify("Clipboard", "Copied to clipboard")
-		else
-			notify("Clipboard", "Your exploit doesn't have the ability to use the clipboard")
+			local success = pcall(everyClipboard, tostring(txt)) -- some executor errored without tostring btw so dont call me out for this
+			if success then
+				notify("Clipboard", "Copied to clipboard")
+				return
+			end
 		end
+		notify("Clipboard", "Your exploit doesn't have the ability to use the clipboard")
 	end
 
 	function chatMessage(str)
 		str = tostring(str)
-		if not isLegacyChat then
-			TextChatService.TextChannels.RBXGeneral:SendAsync(str)
-		else
+		if not isLegacyChat and TextChatService then
+			local success = pcall(function()
+				TextChatService.TextChannels.RBXGeneral:SendAsync(str)
+			end)
+			if success then
+				return
+			end
+		end
+
+		local success = pcall(function()
 			ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
+		end)
+		if not success then
+			notify("Chat", "Your executor cannot send chat messages")
 		end
 	end
 
@@ -242,6 +254,9 @@ return function(env)
 
 	local cooldown = false
 	function writefileCooldown(name, data)
+		if not writefile then
+			return
+		end
 		task.spawn(function()
 			if not cooldown then
 				cooldown = true
@@ -312,16 +327,20 @@ return function(env)
 
 	avatarcache = {}
 	function sendChatWebhook(player, message)
-		if httprequest and vtype(logsWebhook, "string") then
+		if not (httprequest and vtype(logsWebhook, "string")) then
+			return
+		end
+		pcall(function()
 			local id = player.UserId
 			local avatar = avatarcache[id]
 			if not avatar then
-				local d = HttpService:JSONDecode(httprequest({
+				local response = httprequest({
 					Url = "https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds="
 						.. id
 						.. "&size=420x420&format=Png&isCircular=false",
 					Method = "GET",
-				}).Body)["data"]
+				})
+				local d = response and response.Body and HttpService:JSONDecode(response.Body)["data"]
 				avatar = d and d[1].state == "Completed" and d[1].imageUrl or "https://files.catbox.moe/i968v2.jpg"
 				avatarcache[id] = avatar
 			end
@@ -337,7 +356,7 @@ return function(env)
 				Headers = { ["Content-Type"] = "application/json" },
 				Body = log,
 			})
-		end
+		end)
 	end
 
 	ChatLog = function(player)
@@ -363,7 +382,10 @@ return function(env)
 		if writefileExploit() then
 			if #scroll_2:GetChildren() > 0 then
 				notify("Loading", "Hold on a sec")
-				local placeName = CleanFileName(MarketplaceService:GetProductInfo(PlaceId).Name)
+				local placeName = "Unknown Place"
+				pcall(function()
+					placeName = CleanFileName(MarketplaceService:GetProductInfo(PlaceId).Name)
+				end)
 				local writelogs = '-- Zero Yield Chat logs for "' .. placeName .. '"\n'
 				for _, child in pairs(scroll_2:GetChildren()) do
 					writelogs = writelogs .. "\n" .. child.Text
